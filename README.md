@@ -32,13 +32,13 @@ devtools::install_github("FagnerF/IDFequations")
 library(IDFequations)
 
 ### Examples
-IDFequations::ScriptIDF(StatesANA=c("ACRE","AMAPÁ"),Directory="C:/Users/Fagner/Desktop/Results/",Metodo=c("CETESB"),Isozona=c()) #ANA database
+IDFequations::ScriptIDF(StatesANA=c("ACRE","AMAPÁ"),Directory="C:/Users/Fagner/Desktop/Results/",Method=c("CETESB"),Isozona=c()) #ANA database
 
-IDFequations::ScriptIDF(StatesANA=c(),Directory="C:/Users/Fagner/Desktop/Results/",Metodo=c("CETESB"),Isozona=c()) #Local database
+IDFequations::ScriptIDF(StatesANA=c(),Directory="C:/Users/Fagner/Desktop/Results/",Method=c("CETESB"),Isozona=c()) #Local database
 
-IDFequations::ScriptIDFSR(Station=c("Agua Branca-PB"),LatSR=c("-7.512"),LonSR=c("-37.637"),Directory="C:/Users/Fagner/Desktop/Results/",Metodo=c("CETESB"),Isozona=c()) #Remote-sensing (“.nc” or “.tif”)
+IDFequations::ScriptIDFSR(Station=c("Agua Branca-PB"),LatSR=c("-7.512"),LonSR=c("-37.637"),Directory="C:/Users/Fagner/Desktop/Results/",Method=c("CETESB"),Isozona=c()) #Remote-sensing (“.nc” or “.tif”)
 
-IDFequations::ScriptIDFCLIMBra(CLIMBra=c("ssp245"),Station=c("Agua Branca-PB"),LatSR=c("-7.512"),LonSR=c("-37.637"),Directory="C:/Users/Fagner/Desktop/Results/",Metodo=c("CETESB"),Isozona=c()) # CLIMBra database (ssp245 or ssp585)
+IDFequations::ScriptIDFCLIMBra(CLIMBra=c("ssp245"),Station=c("Agua Branca-PB"),LatSR=c("-7.512"),LonSR=c("-37.637"),Directory="C:/Users/Fagner/Desktop/Results/",Method=c("CETESB"),Isozona=c()) # CLIMBra database (ssp245 or ssp585)
 
 IDFequations::ScriptGraph(Directory="C:/Users/Fagner/Desktop/Results/")
 
