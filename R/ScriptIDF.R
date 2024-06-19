@@ -278,8 +278,8 @@ ScriptIDF <- function(StatesANA, Directory, Method, Isozona) {
 
     mapa <- mapa %>%
       addMarkers(
-        lng = ~Longitude,
-        lat = ~Latitude,
+        lng = ~as.numeric(Longitude),
+        lat = ~as.numeric(Latitude),
         label = ~ paste(
           "Station",
           "-",
