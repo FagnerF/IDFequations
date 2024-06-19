@@ -39,11 +39,11 @@ ScriptCodStat <- function(StatesANA, stationType) {
 
       # Scrapping info for each station
       estac <- as.data.frame(cbind(
-        xml2::xml_text(xml2::xml_contents(xml2::xml_find_all(html_raw1, ".//nmestado"))),
-        xml2::xml_double(xml2::xml_contents(xml2::xml_find_all(html_raw1, ".//codigo"))),
-        xml2::xml_text(xml2::xml_contents(xml2::xml_find_all(html_raw1, ".//nome"))),
-        xml2::xml_double(xml2::xml_contents(xml2::xml_find_all(html_raw1, ".//latitude"))),
-        xml2::xml_double(xml2::xml_contents(xml2::xml_find_all(html_raw1, ".//longitude")))
+        xml2::xml_text(xml2::xml_contents(xml2::xml_find_all(html_raw, ".//nmestado"))),
+        xml2::xml_double(xml2::xml_contents(xml2::xml_find_all(html_raw, ".//codigo"))),
+        xml2::xml_text(xml2::xml_contents(xml2::xml_find_all(html_raw, ".//nome"))),
+        xml2::xml_double(xml2::xml_contents(xml2::xml_find_all(html_raw, ".//latitude"))),
+        xml2::xml_double(xml2::xml_contents(xml2::xml_find_all(html_raw, ".//longitude")))
       ))
 
       # Filtering
@@ -55,9 +55,7 @@ ScriptCodStat <- function(StatesANA, stationType) {
         # Eliminate duplicate rows by station_code
         dplyr::distinct_at(2, .keep_all = TRUE) %>%
         # Rename columns
-        rlang::set_names(c("State", "codstation", "Name", "lat", "long")) %>%
-        # Change area_km2 class to numeric
-        dplyr::mutate(dplyr::across('area_km2', .fns = as.numeric))
+        rlang::set_names(c("State", "codstation", "Name", "lat", "long"))
 
       # Scrapping info for each station
       # estac <- html_raw %>%
