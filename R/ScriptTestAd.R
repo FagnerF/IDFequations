@@ -1,6 +1,15 @@
 ScriptTestAd <- function(ArquivPrec) {
   my_list01 <- list()
 
+  dfTAD <- NULL
+  modnormal <- NULL
+  modln <- NULL
+  modgamma <- NULL
+  modexpo <- NULL
+  modweibull <- NULL
+  modgumbel <- NULL
+  modGEV <- NULL
+
   Fr <- seq(1, length(ArquivPrec)) / (length(ArquivPrec) + 1)
 
   fit_model <- function(distribution, data, ...) {
