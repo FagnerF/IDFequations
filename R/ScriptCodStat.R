@@ -46,17 +46,6 @@ ScriptCodStat <- function(StatesANA, stationType) {
         xml2::xml_double(xml2::xml_contents(xml2::xml_find_all(html_raw, ".//longitude")))
       ))
 
-      # Filtering
-      estac <- estac %>%
-        # Convert to tibble format
-        dplyr::as_tibble() %>%
-        # Reassure stations are from the desired state
-        dplyr::filter(estac$V1 == states[i]) %>%
-        # Eliminate duplicate rows by station_code
-        dplyr::distinct_at(2, .keep_all = TRUE) %>%
-        # Rename columns
-        rlang::set_names(c("State", "codstation", "Name", "lat", "long"))
-
       # Scrapping info for each station
       # estac <- html_raw %>%
       #   xml2::xml_find_all(".//codigo") %>%
@@ -107,7 +96,8 @@ ScriptCodStat <- function(StatesANA, stationType) {
 
     # Loop para verificar a disponibilidade dos dados das estações em paralelo
     foreach(i = 1:nrow(CodStat), .combine = "c") %do% {
-      station_number <- gsub(" ", "%20", CodStat$station_code[i])
+      #station_number <- gsub(" ", "%20", CodStat$station_code[i])
+      station_number <- gsub(" ", "%20", CodStat$codigo[i])
 
       cat("Station", station_number, "\n")
 
@@ -157,7 +147,8 @@ ScriptCodStat <- function(StatesANA, stationType) {
           if (quantidade_anos >= 30) {
             # Adicionar o código da estação à lista de estações selecionadas
             selected_stations <- c(selected_stations, station_number)
-            selected_stations_info[[station_number]] <- list(lat = CodStat$lat[i], long = CodStat$long[i])
+            #selected_stations_info[[station_number]] <- list(lat = CodStat$lat[i], long = CodStat$long[i])
+            selected_stations_info[[station_number]] <- list(State = CodStat$State[i], Name = CodStat$Name[i], lat = CodStat$lat[i], long = CodStat$long[i])
             cat("Station", station_number, "has data for", quantidade_anos, "years. Adding station code to the list.\n")
           } else {
             cat("Data length less than 30 years for station", station_number, ". It has data for", quantidade_anos, "years.\n")
@@ -173,6 +164,8 @@ ScriptCodStat <- function(StatesANA, stationType) {
 
     dfTab <- data.frame(
       codstation = unlist(selected_stations),
+      State = sapply(selected_stations_info, function(x) x$State),
+      Name = sapply(selected_stations_info, function(x) x$Name),
       lat = sapply(selected_stations_info, function(x) x$lat),
       long = sapply(selected_stations_info, function(x) x$long)
     )
