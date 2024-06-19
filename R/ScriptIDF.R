@@ -44,6 +44,8 @@ ScriptIDF <- function(StatesANA, Directory, Method, Isozona) {
   if (length(StatesANA) >= 1) {
     CodStat <- ScriptCodStat(StatesANA, stationType)$CodStat
 
+    State <- vector("character", length = nrow(CodStat))
+    Name <- vector("character", length = nrow(CodStat))
     Station <- vector("numeric", length = nrow(CodStat))
     Latitude <- vector("numeric", length = nrow(CodStat))
     Longitude <- vector("numeric", length = nrow(CodStat))
