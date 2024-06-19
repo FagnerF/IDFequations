@@ -84,7 +84,7 @@ ScriptCodStat <- function(StatesANA, stationType) {
 
     CodStat <- unique(CodStat) %>%
       data.frame() %>%
-      stats::setNames(c("State", "codstation", "Name", "lat", "long"))
+      stats::setNames(c("state", "codstation", "name", "lat", "long"))
 
     cat("\n")
 
@@ -150,7 +150,7 @@ ScriptCodStat <- function(StatesANA, stationType) {
             # Adicionar o código da estação à lista de estações selecionadas
             selected_stations <- c(selected_stations, station_number)
             #selected_stations_info[[station_number]] <- list(lat = CodStat$lat[i], long = CodStat$long[i])
-            selected_stations_info[[station_number]] <- list(State = CodStat$State[i], Name = CodStat$Name[i], lat = CodStat$lat[i], long = CodStat$long[i])
+            selected_stations_info[[station_number]] <- list(State = CodStat$state[i], Name = CodStat$name[i], lat = CodStat$lat[i], long = CodStat$long[i])
             cat("Station", station_number, "has data for", quantidade_anos, "years. Adding station code to the list.\n")
           } else {
             cat("Data length less than 30 years for station", station_number, ". It has data for", quantidade_anos, "years.\n")

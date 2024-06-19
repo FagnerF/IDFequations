@@ -219,8 +219,8 @@ ScriptIDF <- function(StatesANA, Directory, Method, Isozona) {
             tmp[[length(tmp) + 1]] <- TabelaResultados
 
             # Armazenar dados da estação
-            State[length(tmp)] <- CodStat$State[i]
-            Name[length(tmp)] <- CodStat$Name[i]
+            State[length(tmp)] <- CodStat$state[i]
+            Name[length(tmp)] <- CodStat$name[i]
             Station[length(tmp)] <- CodStat$codstation[i]
             Latitude[length(tmp)] <- CodStat$lat[i]
             Longitude[length(tmp)] <- CodStat$long[i]
@@ -241,8 +241,8 @@ ScriptIDF <- function(StatesANA, Directory, Method, Isozona) {
       TableFinal <- do.call(rbind, tmp)
 
       # Adicionar dados de estação à TableFinal
-      TableFinal$State <- Station[1:length(tmp)]
-      TableFinal$Name <- Station[1:length(tmp)]
+      TableFinal$State <- State[1:length(tmp)]
+      TableFinal$Name <- Name[1:length(tmp)]
       TableFinal$Station <- Station[1:length(tmp)]
       TableFinal$Latitude <- Latitude[1:length(tmp)]
       TableFinal$Longitude <- Longitude[1:length(tmp)]
