@@ -36,22 +36,45 @@ ScriptCodStat <- function(StatesANA, stationType) {
     html_raw <- get_station_data(estadoG, stationType)
 
     if (!is.null(html_raw)) {
+
       # Scrapping info for each station
-      estac <- html_raw %>%
-        xml_find_all(".//codigo") %>%
-        xml_text() %>%
-        as.data.frame() %>%
-        setNames("station_code")
+      estac <- as.data.frame(cbind(
+        xml2::xml_text(xml2::xml_contents(xml2::xml_find_all(html_raw1, ".//nmestado"))),
+        xml2::xml_double(xml2::xml_contents(xml2::xml_find_all(html_raw1, ".//codigo"))),
+        xml2::xml_text(xml2::xml_contents(xml2::xml_find_all(html_raw1, ".//nome"))),
+        xml2::xml_double(xml2::xml_contents(xml2::xml_find_all(html_raw1, ".//latitude"))),
+        xml2::xml_double(xml2::xml_contents(xml2::xml_find_all(html_raw1, ".//longitude")))
+      ))
 
-      estac$lat <- html_raw %>%
-        xml_find_all(".//latitude") %>%
-        xml_text() %>%
-        as.numeric()
+      # Filtering
+      estac <- estac %>%
+        # Convert to tibble format
+        dplyr::as_tibble() %>%
+        # Reassure stations are from the desired state
+        dplyr::filter(estac$V1 == states[i]) %>%
+        # Eliminate duplicate rows by station_code
+        dplyr::distinct_at(2, .keep_all = TRUE) %>%
+        # Rename columns
+        rlang::set_names(c("State", "codstation", "Name", "lat", "long")) %>%
+        # Change area_km2 class to numeric
+        dplyr::mutate(dplyr::across('area_km2', .fns = as.numeric))
 
-      estac$long <- html_raw %>%
-        xml_find_all(".//longitude") %>%
-        xml_text() %>%
-        as.numeric()
+      # Scrapping info for each station
+      # estac <- html_raw %>%
+      #   xml2::xml_find_all(".//codigo") %>%
+      #   xml2::xml_text() %>%
+      #   as.data.frame() %>%
+      #   setNames("station_code")
+      #
+      # estac$lat <- html_raw %>%
+      #   xml2::xml_find_all(".//latitude") %>%
+      #   xml2::xml_text() %>%
+      #   as.numeric()
+      #
+      # estac$long <- html_raw %>%
+      #   xml2::xml_find_all(".//longitude") %>%
+      #   xml2::xml_text() %>%
+      #   as.numeric()
 
       # Save stations by state in list format
       if (nrow(estac) > 0) {
@@ -110,8 +133,8 @@ ScriptCodStat <- function(StatesANA, stationType) {
 
       if (!is.null(html_raw)) {
         station_df <- html_raw %>%
-          xml_find_all(".//documentelement") %>%
-          xml_children() %>%
+          xml2::xml_find_all(".//documentelement") %>%
+          xml2::xml_children() %>%
           xml2::as_list()
 
         station_df <- lapply(station_df, function(row) {
