@@ -98,8 +98,7 @@ ScriptCodStat <- function(StatesANA, stationType) {
 
     # Loop para verificar a disponibilidade dos dados das estações em paralelo
     foreach(i = 1:nrow(CodStat), .combine = "c") %do% {
-      #station_number <- gsub(" ", "%20", CodStat$station_code[i])
-      station_number <- gsub(" ", "%20", CodStat$codigo[i])
+      station_number <- gsub(" ", "%20", CodStat$station_code[i])
 
       cat("Station", station_number, "\n")
 
