@@ -12,6 +12,8 @@ ScriptExit <- function(TamanhoArquivDuracoes,
                        dfTAD) {
   my_list05 <- list()
 
+  TabFinal <- NULL
+
   IMaxSim <- matrix(0, TamanhoArquivDuracoes, TamanhoArquivTr)
 
   for (l in 1:TamanhoArquivTr) {
