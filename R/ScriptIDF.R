@@ -268,7 +268,7 @@ ScriptIDF <- function(StatesANA, Directory, Method, Isozona) {
         col.names = TRUE
       )
 
-    mapa <- leaflet(data = TableFinal[, -c(8:12)]) %>%
+    mapa <- leaflet(data = TableFinal[, -c(1:3,10:14)]) %>%
       addTiles() %>%
       setView(
         lng = -49.265,
