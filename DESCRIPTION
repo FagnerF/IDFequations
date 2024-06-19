@@ -36,3 +36,5 @@ Imports:
     xml2
 Remotes: 
     USGS-R/smwrBase
+URL: https://github.com/FagnerF/IDFequations
+BugReports: https://github.com/FagnerF/IDFequations/issues
