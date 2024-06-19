@@ -241,8 +241,8 @@ ScriptIDF <- function(StatesANA, Directory, Method, Isozona) {
       TableFinal <- do.call(rbind, tmp)
 
       # Adicionar dados de estação à TableFinal
-      TableFinal$State <- state[1:length(tmp)]
-      TableFinal$Name <- name[1:length(tmp)]
+      TableFinal$State <- State[1:length(tmp)]
+      TableFinal$Name <- Name[1:length(tmp)]
       TableFinal$Station <- Station[1:length(tmp)]
       TableFinal$Latitude <- Latitude[1:length(tmp)]
       TableFinal$Longitude <- Longitude[1:length(tmp)]

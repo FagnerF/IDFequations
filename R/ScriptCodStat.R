@@ -2,6 +2,8 @@ ScriptCodStat <- function(StatesANA, stationType) {
   # Inicializa a lista CodStat
   CodStat <- list()
 
+  dfTab <- NULL
+
   cat("Downloading... \n")
 
   # Configuração de paralelismo
