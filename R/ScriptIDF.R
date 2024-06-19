@@ -1,0 +1,503 @@
+#' This script calculates the IDF Equations for Brazil
+#'
+#' @param StatesANA Input Data server ANA ("ACRE") or Local ("")
+#' @param Directory Input Location where the IDF equations will be saved
+#' @param Method Input Disaggregation method
+#' @param Isozona Input Isozona
+#'
+#' @importFrom stats setNames qnorm qlnorm qgamma qexp qweibull pweibull sd nlminb na.omit
+#' @import leaflet
+#' @import dplyr
+#' @importFrom magrittr %>%
+#' @importFrom smwrBase ppearsonIII qpearsonIII plpearsonIII qlpearsonIII
+#' @importFrom PearsonDS ppearson0 qpearson0
+#' @import readxl
+#' @import fitdistrplus
+#' @import e1071
+#' @import evd
+#' @import hydroGOF
+#' @import xml2
+#' @import optimx
+#' @import lubridate
+#' @import utils
+#' @import foreach
+#' @import doParallel
+#' @import parallel
+#' @import tibble
+#' @import optimx
+#'
+#' @export
+ScriptIDF <- function(StatesANA, Directory, Method, Isozona) {
+  tmp <- NULL
+
+  ArquivTr <- c(5, 10, 15, 20, 25, 50, 100) # (years)
+  TamanhoArquivTr <- length(ArquivTr)
+
+  Probab <- 1 / ArquivTr
+
+  ArquivDuracoes <-
+    c(6, 10, 15, 20, 30, 60, 360, 480, 720, 1440) # (minutes)
+  TamanhoArquivDuracoes <- length(ArquivDuracoes)
+
+  stationType <- 2
+
+  if (length(StatesANA) >= 1) {
+    CodStat <- ScriptCodStat(StatesANA, stationType)$CodStat
+
+    Station <- vector("numeric", length = nrow(CodStat))
+    Latitude <- vector("numeric", length = nrow(CodStat))
+    Longitude <- vector("numeric", length = nrow(CodStat))
+
+    cat("\n")
+
+    for (i in 1:nrow(CodStat)) {
+      cat("== Working on the data ==\n")
+      cat("Wait...\n")
+      cat("Station", "", CodStat$codstation[i], "\n")
+
+      # Create list to receive results
+      serie <- list()
+      Data <- list()
+      Ano <- list()
+      Prec <- list()
+
+      # Wrap the code accessing station data in tryCatch
+      tryCatch(
+        {
+          # Download the historical series from the ANA data-base
+          station_number <- gsub(" ", "%20", CodStat$codstation[i])
+
+          html_raw <- xml2::read_html(
+            paste(
+              "http://telemetriaws1.ana.gov.br/ServiceANA.asmx/HidroSerieHistorica?codEstacao=",
+              station_number,
+              "&dataInicio=&dataFim=&tipoDados=",
+              stationType,
+              "&nivelConsistencia=",
+              sep = ""
+            )
+          )
+
+          station_df <- html_raw %>%
+            xml2::xml_find_all(".//documentelement") %>%
+            xml2::xml_children() %>%
+            xml2::as_list()
+
+          station_df <- lapply(station_df, function(row) {
+            row[sapply(row, function(x) {
+              length(x) == 0
+            })] <- NA
+            row %>%
+              unlist() %>%
+              t() %>%
+              dplyr::as_tibble()
+          }) %>%
+            do.call(what = dplyr::bind_rows)
+
+          # Data-base station
+          station_df <- station_df %>%
+            # Convert precipitation columns to numeric and datahora to date format
+            dplyr::mutate(
+              dplyr::across(dplyr::matches("chuva..$"), as.numeric),
+              dplyr::across(dplyr::matches("data"), as.Date)
+            ) %>%
+            dplyr::rename(data = dplyr::any_of("datahora")) %>%
+            dplyr::arrange(dplyr::across("data"))
+
+          serie[[i]] <- station_df
+
+          tab <-
+            data.frame(serie[[i]][["data"]], serie[[i]][["maxima"]])
+
+          dados <- tab %>%
+            stats::setNames(c("Data", "Prec")) %>%
+            stats::na.omit()
+
+          MaxPrec <- dados %>%
+            dplyr::mutate(Ano = lubridate::year(lubridate::ydm(Data))) %>%
+            dplyr::group_by(Ano) %>%
+            dplyr::slice(which.max(Prec)) %>%
+            dplyr::ungroup() %>%
+            data.frame()
+
+          row_sub <- apply(MaxPrec, 1, function(row) {
+            all(row != 0)
+          })
+
+          ArquivPrec <- MaxPrec[row_sub, ]
+
+          ArquivPrecNumeric <- as.numeric(MaxPrec[row_sub, 2])
+
+          ArquivPrecCrescente <- sort(c(ArquivPrecNumeric))
+
+          ArquivPrec <- ArquivPrecCrescente
+
+          TamanhoArquivPrec <- length(ArquivPrec)
+
+          modnormal <- ScriptTestAd(ArquivPrec)$modnormal
+          modln <- ScriptTestAd(ArquivPrec)$modln
+          modgamma <- ScriptTestAd(ArquivPrec)$modgamma
+          modexpo <- ScriptTestAd(ArquivPrec)$modexpo
+          modweibull <- ScriptTestAd(ArquivPrec)$modweibull
+          modgumbel <- ScriptTestAd(ArquivPrec)$modgumbel
+          modGEV <- ScriptTestAd(ArquivPrec)$modGEV
+
+          if (is.null(modnormal) && is.null(modln) && is.null(modgamma) &&
+            is.null(modexpo) && is.null(modweibull) && is.null(modgumbel) && is.null(modGEV)) {
+            cat(paste0("ATTENTION, no distribution fits the station ", CodStat$codstation[i], "!"))
+            # Pass to the next station
+            next
+          } else {
+            # Calcular distribuições acumuladas
+            dfTAD <- ScriptTestAd(ArquivPrec)$dfTAD$Distribuicoes
+
+            X <- ScriptDistProb(
+              dfTAD,
+              Probab,
+              modnormal,
+              modln,
+              modgamma,
+              modexpo,
+              modweibull,
+              modgumbel,
+              modGEV
+            )$X
+
+            IMaxObs <- ScriptPMax24h(
+              X,
+              TamanhoArquivDuracoes,
+              TamanhoArquivTr,
+              ArquivDuracoes,
+              ArquivTr,
+              Method,
+              Isozona
+            )$IMaxObs
+            kotim <- ScriptOtimiza(
+              TamanhoArquivDuracoes,
+              TamanhoArquivTr,
+              ArquivTr,
+              ArquivDuracoes,
+              IMaxObs
+            )$kotim
+            motim <- ScriptOtimiza(
+              TamanhoArquivDuracoes,
+              TamanhoArquivTr,
+              ArquivTr,
+              ArquivDuracoes,
+              IMaxObs
+            )$motim
+            t0otim <- ScriptOtimiza(
+              TamanhoArquivDuracoes,
+              TamanhoArquivTr,
+              ArquivTr,
+              ArquivDuracoes,
+              IMaxObs
+            )$t0otim
+            notim <- ScriptOtimiza(
+              TamanhoArquivDuracoes,
+              TamanhoArquivTr,
+              ArquivTr,
+              ArquivDuracoes,
+              IMaxObs
+            )$notim
+
+            TabelaResultados <- ScriptExit(
+              TamanhoArquivDuracoes,
+              TamanhoArquivTr,
+              kotim,
+              ArquivTr,
+              motim,
+              ArquivDuracoes,
+              t0otim,
+              notim,
+              ArquivPrec,
+              IMaxObs,
+              dfTAD
+            )$TabFinal
+
+            # Armazenar resultados apenas se a estação tiver uma distribuição ajustada
+            tmp[[length(tmp) + 1]] <- TabelaResultados
+
+            # Armazenar dados da estação
+            Station[length(tmp)] <- CodStat$codstation[i]
+            Latitude[length(tmp)] <- CodStat$lat[i]
+            Longitude[length(tmp)] <- CodStat$long[i]
+
+            cat("\014")
+          }
+        },
+        error = function(e) {
+          cat("Error occurred while accessing station data:", conditionMessage(e), "\n")
+          cat("Moving to the next station...\n")
+        }
+      )
+    }
+
+    # Criar a tabela apenas com as estações que têm distribuições ajustadas
+    if (length(tmp) > 0) {
+      # Converter a lista de resultados ajustados em um data frame
+      TableFinal <- do.call(rbind, tmp)
+
+      # Adicionar dados de estação à TableFinal
+      TableFinal$Station <- Station[1:length(tmp)]
+      TableFinal$Latitude <- Latitude[1:length(tmp)]
+      TableFinal$Longitude <- Longitude[1:length(tmp)]
+
+      # Reorganizar as colunas para que as três últimas se tornem as três primeiras
+      TableFinal <- TableFinal[, c(10:12, 1:9)]
+    } else {
+      # Caso contrário, definir TableFinal como NULL
+      TableFinal <- NULL
+    }
+
+    View(TableFinal)
+
+    TabFinal <- TableFinal %>%
+      write.table(
+        paste0(Directory, "/", "TabCoefANA.txt"),
+        append = FALSE,
+        sep = ";",
+        dec = ".",
+        row.names = FALSE,
+        col.names = TRUE
+      )
+
+    mapa <- leaflet(data = TableFinal[, -c(8:12)]) %>%
+      addTiles() %>%
+      setView(
+        lng = -49.265,
+        lat = -10.939,
+        zoom = 4
+      )
+
+    mapa <- mapa %>%
+      addMarkers(
+        lng = ~Longitude,
+        lat = ~Latitude,
+        label = ~ paste(
+          "Station",
+          "-",
+          Station,
+          ":",
+          "*",
+          "K:",
+          K,
+          "*",
+          "m:",
+          m,
+          "*",
+          "t0:",
+          t0,
+          "*",
+          "n:",
+          n
+        )
+      )
+
+    return(mapa)
+  } else {
+    # Create list to receive results
+    LatLon <- list()
+
+    path <- file.choose()
+
+    NomesAbas <- readxl::excel_sheets(path)
+
+    LatLon <- readxl::read_xlsx(paste0(path), "LatLon") %>%
+      stats::na.omit()
+
+    iteration <- (length(NomesAbas) - 1)
+
+    Station <- vector("character", length = iteration)
+    Latitude <- vector("numeric", length = iteration)
+    Longitude <- vector("numeric", length = iteration)
+
+    for (t in 1:iteration) {
+      cat("== Working on the data ==", "\n")
+      cat("Wait...", "\n")
+      cat("Station", "-", NomesAbas[t + 1], "\n")
+
+      # Create list to receive results
+      Dados <- list()
+
+      Dados <- readxl::read_xlsx(paste0(path), NomesAbas[t + 1]) %>%
+        stats::na.omit()
+
+      Dados <- Dados[Dados[, 2] != "0", ]
+      Dados <- Dados[Dados[, 2] != "0.1", ]
+
+      Dadosdf <- data.frame(Dados[, ])
+
+      DadosdfNumeric <- as.numeric(Dadosdf[, 2])
+
+      ArquivPrec <- DadosdfNumeric[order(DadosdfNumeric)]
+
+      TamanhoArquivPrec <- length(ArquivPrec)
+
+      modnormal <- ScriptTestAd(ArquivPrec)$modnormal
+      modln <- ScriptTestAd(ArquivPrec)$modln
+      modgamma <- ScriptTestAd(ArquivPrec)$modgamma
+      modexpo <- ScriptTestAd(ArquivPrec)$modexpo
+      modweibull <- ScriptTestAd(ArquivPrec)$modweibull
+      modgumbel <- ScriptTestAd(ArquivPrec)$modgumbel
+      modGEV <- ScriptTestAd(ArquivPrec)$modGEV
+
+      if (is.null(modnormal) && is.null(modln) && is.null(modgamma) &&
+          is.null(modexpo) && is.null(modweibull) && is.null(modgumbel) && is.null(modGEV)) {
+        cat(paste0("ATTENTION, no distribution fits the station ", NomesAbas[t + 1], "!"))
+        # Pass to the next station
+        next
+      } else {
+        # Calcular distribuições acumuladas
+        dfTAD <- ScriptTestAd(ArquivPrec)$dfTAD$Distribuicoes
+        X <- ScriptDistProb(
+          dfTAD,
+          Probab,
+          modnormal,
+          modln,
+          modgamma,
+          modexpo,
+          modweibull,
+          modgumbel,
+          modGEV
+        )$X
+
+        # Calcular valores máximos observados
+        IMaxObs <- ScriptPMax24h(
+          X,
+          TamanhoArquivDuracoes,
+          TamanhoArquivTr,
+          ArquivDuracoes,
+          ArquivTr,
+          Method,
+          Isozona
+        )$IMaxObs
+
+        # Otimizar parâmetros
+        kotim <- ScriptOtimiza(
+          TamanhoArquivDuracoes,
+          TamanhoArquivTr,
+          ArquivTr,
+          ArquivDuracoes,
+          IMaxObs
+        )$kotim
+
+        motim <- ScriptOtimiza(
+          TamanhoArquivDuracoes,
+          TamanhoArquivTr,
+          ArquivTr,
+          ArquivDuracoes,
+          IMaxObs
+        )$motim
+
+        t0otim <- ScriptOtimiza(
+          TamanhoArquivDuracoes,
+          TamanhoArquivTr,
+          ArquivTr,
+          ArquivDuracoes,
+          IMaxObs
+        )$t0otim
+
+        notim <- ScriptOtimiza(
+          TamanhoArquivDuracoes,
+          TamanhoArquivTr,
+          ArquivTr,
+          ArquivDuracoes,
+          IMaxObs
+        )$notim
+
+        # Gerar tabela final de resultados
+        TabelaResultados <- ScriptExit(
+          TamanhoArquivDuracoes,
+          TamanhoArquivTr,
+          kotim,
+          ArquivTr,
+          motim,
+          ArquivDuracoes,
+          t0otim,
+          notim,
+          ArquivPrec,
+          IMaxObs,
+          dfTAD
+        )$TabFinal
+
+        # Armazenar resultados apenas se a estação tiver uma distribuição ajustada
+        tmp[[length(tmp) + 1]] <- TabelaResultados
+
+        # Armazenar dados da estação
+        Station[length(tmp)] <- NomesAbas[t + 1]
+        Latitude[length(tmp)] <- LatLon$Latitude[t]
+        Longitude[length(tmp)] <- LatLon$Longitude[t]
+      }
+
+      cat("\014")
+    }
+
+    # Criar a tabela apenas com as estações que têm distribuições ajustadas
+    if (length(tmp) > 0) {
+      # Converter a lista de resultados ajustados em um data frame
+      TableFinal <- do.call(rbind, tmp)
+
+      # Adicionar dados de estação à TableFinal
+      TableFinal$Station <- Station[1:length(tmp)]
+      TableFinal$Latitude <- Latitude[1:length(tmp)]
+      TableFinal$Longitude <- Longitude[1:length(tmp)]
+
+      # Reorganizar as colunas para que as três últimas se tornem as três primeiras
+      TableFinal <- TableFinal[, c(10:12, 1:9)]
+    } else {
+      # Caso contrário, definir TableFinal como NULL
+      TableFinal <- NULL
+    }
+
+    View(TableFinal)
+
+    TabFinal <- TableFinal %>%
+      write.table(
+        paste0(Directory, "/", "TabCoefLocal.txt"),
+        append = FALSE,
+        sep = ";",
+        dec = ".",
+        row.names = FALSE,
+        col.names = TRUE
+      )
+
+    mapa <- leaflet(data = TableFinal[, -c(8:12)]) %>%
+      addTiles() %>%
+      setView(
+        lng = -49.265,
+        lat = -10.939,
+        zoom = 4
+      )
+
+    mapa <- mapa %>%
+      addMarkers(
+        lng = ~Longitude,
+        lat = ~Latitude,
+        label = ~ paste(
+          "Station",
+          "-",
+          Station,
+          ":",
+          "*",
+          "K:",
+          K,
+          "*",
+          "m:",
+          m,
+          "*",
+          "t0:",
+          t0,
+          "*",
+          "n:",
+          n
+        )
+      )
+
+    return(mapa)
+
+    cat("\014")
+
+    cat("Process finished!", "\n")
+  }
+}
