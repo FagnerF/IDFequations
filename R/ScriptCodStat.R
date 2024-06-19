@@ -12,7 +12,7 @@ ScriptCodStat <- function(StatesANA, stationType) {
   get_station_data <- function(estadoG, stationType) {
     html_raw <- tryCatch(
       {
-        read_html(
+        xml2::read_html(
           paste0(
             "http://telemetriaws1.ana.gov.br/ServiceANA.asmx/HidroInventario?codEstDE=&codEstATE=&tpEst=",
             stationType,
@@ -82,7 +82,9 @@ ScriptCodStat <- function(StatesANA, stationType) {
       return(NULL)
     }
 
-    CodStat <- unique(CodStat)
+    CodStat <- unique(CodStat) %>%
+      data.frame() %>%
+      stats::setNames(c("State", "codstation", "Name", "lat", "long"))
 
     cat("\n")
 
