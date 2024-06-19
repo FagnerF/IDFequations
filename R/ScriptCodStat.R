@@ -48,23 +48,6 @@ ScriptCodStat <- function(StatesANA, stationType) {
         xml2::xml_double(xml2::xml_contents(xml2::xml_find_all(html_raw, ".//longitude")))
       ))
 
-      # Scrapping info for each station
-      # estac <- html_raw %>%
-      #   xml2::xml_find_all(".//codigo") %>%
-      #   xml2::xml_text() %>%
-      #   as.data.frame() %>%
-      #   setNames("station_code")
-      #
-      # estac$lat <- html_raw %>%
-      #   xml2::xml_find_all(".//latitude") %>%
-      #   xml2::xml_text() %>%
-      #   as.numeric()
-      #
-      # estac$long <- html_raw %>%
-      #   xml2::xml_find_all(".//longitude") %>%
-      #   xml2::xml_text() %>%
-      #   as.numeric()
-
       # Save stations by state in list format
       if (nrow(estac) > 0) {
         CodStat <- c(CodStat, list(estac))
@@ -100,7 +83,6 @@ ScriptCodStat <- function(StatesANA, stationType) {
 
     # Loop para verificar a disponibilidade dos dados das estações em paralelo
     foreach(i = 1:nrow(CodStat), .combine = "c") %do% {
-      #station_number <- gsub(" ", "%20", CodStat$station_code[i])
       station_number <- gsub(" ", "%20", CodStat$codstation[i])
 
       cat("Station", station_number, "\n")
@@ -151,7 +133,6 @@ ScriptCodStat <- function(StatesANA, stationType) {
           if (quantidade_anos >= 30) {
             # Adicionar o código da estação à lista de estações selecionadas
             selected_stations <- c(selected_stations, station_number)
-            #selected_stations_info[[station_number]] <- list(lat = CodStat$lat[i], long = CodStat$long[i])
             selected_stations_info[[station_number]] <- list(State = CodStat$state[i], Name = CodStat$name[i], lat = CodStat$lat[i], long = CodStat$long[i])
             cat("Station", station_number, "has data for", quantidade_anos, "years. Adding station code to the list.\n")
           } else {

@@ -221,8 +221,8 @@ ScriptIDF <- function(StatesANA, Directory, Method, Isozona) {
             tmp[[length(tmp) + 1]] <- TabelaResultados
 
             # Armazenar dados da estação
-            State[length(tmp)] <- CodStat$state[i]
-            Name[length(tmp)] <- CodStat$name[i]
+            State[length(tmp)] <- CodStat$State[i]
+            Name[length(tmp)] <- CodStat$Name[i]
             Station[length(tmp)] <- CodStat$codstation[i]
             Latitude[length(tmp)] <- CodStat$lat[i]
             Longitude[length(tmp)] <- CodStat$long[i]
@@ -249,7 +249,7 @@ ScriptIDF <- function(StatesANA, Directory, Method, Isozona) {
       TableFinal$Latitude <- Latitude[1:length(tmp)]
       TableFinal$Longitude <- Longitude[1:length(tmp)]
 
-      # Reorganizar as colunas para que as três últimas se tornem as três primeiras
+      # Reorganizar as colunas
       TableFinal <- TableFinal[, c(10:14, 1:9)]
     } else {
       # Caso contrário, definir TableFinal como NULL
