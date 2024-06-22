@@ -7,7 +7,7 @@ ScriptExit <- function(TamanhoArquivDuracoes,
                        dfTAD) {
   my_list05 <- list()
 
-  TabFinal <- NULL
+  TabFinal <- matrix(NA, 3, 16)
   a <- NA_real_
   b <- NA_real_
   c <- NA_real_
@@ -40,9 +40,9 @@ ScriptExit <- function(TamanhoArquivDuracoes,
     RMSE <- c(round(max(hydroGOF::rmse(IMaxSim, IMaxObs)), 3))
     MAE <- c(round(max(hydroGOF::mae(IMaxSim, IMaxObs)), 3))
   } else if (eq_number == 2) {
-    for (m in 1:TamanhoArquivTr) {
-      for (n in 1:TamanhoArquivDuracoes) {
-        IMaxSim[n, m] <- (best_result$aotim * (ArquivTr[m])^best_result$botim) / ((ArquivDuracoes[n] + best_result$cotim)^(best_result$dotim * (ArquivTr[m])^best_result$eotim))
+    for (j in 1:TamanhoArquivTr) {
+      for (i in 1:TamanhoArquivDuracoes) {
+        IMaxSim[i, j] <- (best_result$aotim * (ArquivTr[j])^best_result$botim) / ((ArquivDuracoes[i] + best_result$cotim)^(best_result$dotim * (ArquivTr[j])^best_result$eotim))
       }
     }
 
@@ -59,9 +59,9 @@ ScriptExit <- function(TamanhoArquivDuracoes,
     RMSE <- c(round(max(hydroGOF::rmse(IMaxSim, IMaxObs)), 3))
     MAE <- c(round(max(hydroGOF::mae(IMaxSim, IMaxObs)), 3))
   } else if (eq_number == 3) {
-    for (s in 1:TamanhoArquivTr) {
-      for (v in 1:TamanhoArquivDuracoes) {
-        IMaxSim[v, s] <- ((best_result$aotim * (ArquivDuracoes[v] + best_result$botim)^best_result$cotim) + (best_result$dotim * (ArquivDuracoes[v] + best_result$eotim)^best_result$fotim) * (best_result$gotim + best_result$hotim * log(log(ArquivTr[s] / (ArquivTr[s] - 1))))) * 60
+    for (j in 1:TamanhoArquivTr) {
+      for (i in 1:TamanhoArquivDuracoes) {
+        IMaxSim[i, j] <- ((best_result$aotim * (ArquivDuracoes[j] + best_result$botim)^best_result$cotim) + (best_result$dotim * (ArquivDuracoes[j] + best_result$eotim)^best_result$fotim) * (best_result$gotim + best_result$hotim * log(log(ArquivTr[i] / (ArquivTr[i] - 1))))) * 60
       }
     }
 
@@ -81,9 +81,9 @@ ScriptExit <- function(TamanhoArquivDuracoes,
     RMSE <- c(round(max(hydroGOF::rmse(IMaxSim, IMaxObs)), 3))
     MAE <- c(round(max(hydroGOF::mae(IMaxSim, IMaxObs)), 3))
   } else if (eq_number == 4) {
-    for (b in 1:TamanhoArquivTr) {
-      for (a in 1:TamanhoArquivDuracoes) {
-        IMaxSim[a, b] <- (best_result$aotim * (ArquivTr[b] - best_result$botim)^best_result$cotim) / (((best_result$dotim * ArquivDuracoes[a]) + best_result$eotim)^best_result$fotim)
+    for (j in 1:TamanhoArquivTr) {
+      for (i in 1:TamanhoArquivDuracoes) {
+        IMaxSim[i, j] <- (best_result$aotim * (ArquivTr[j] - best_result$botim)^best_result$cotim) / (((best_result$dotim * ArquivDuracoes[i]) + best_result$eotim)^best_result$fotim)
       }
     }
 
@@ -101,9 +101,9 @@ ScriptExit <- function(TamanhoArquivDuracoes,
     RMSE <- c(round(max(hydroGOF::rmse(IMaxSim, IMaxObs)), 3))
     MAE <- c(round(max(hydroGOF::mae(IMaxSim, IMaxObs)), 3))
   } else if (eq_number == 5) {
-    for (g in 1:TamanhoArquivTr) {
-      for (r in 1:TamanhoArquivDuracoes) {
-        IMaxSim[r, g] <- (best_result$aotim * (ArquivTr[g]+best_result$botim)^best_result$cotim) / ((ArquivDuracoes[r] + best_result$dotim)^best_result$eotim)
+    for (j in 1:TamanhoArquivTr) {
+      for (i in 1:TamanhoArquivDuracoes) {
+        IMaxSim[i, j] <- (best_result$aotim * (ArquivTr[j] + best_result$botim)^best_result$cotim) / ((ArquivDuracoes[i] + best_result$dotim)^best_result$eotim)
       }
     }
 
@@ -121,7 +121,7 @@ ScriptExit <- function(TamanhoArquivDuracoes,
     MAE <- c(round(max(hydroGOF::mae(IMaxSim, IMaxObs)), 3))
   }
 
-  # Criar TabFinal, definindo NA explicitamente onde necessário para a, b, c, d, e, f, g, h
+  # Criar TabFinal, definindo NA explicitamente
   TabFinal <- data.frame(
     a = ifelse(all(is.na(a)), NA, a),
     b = ifelse(all(is.na(b)), NA, b),
@@ -131,7 +131,7 @@ ScriptExit <- function(TamanhoArquivDuracoes,
     f = ifelse(all(is.na(f)), NA, f),
     g = ifelse(all(is.na(g)), NA, g),
     h = ifelse(all(is.na(h)), NA, h),
-    Distribuicao = c(dfTAD),
+    Distribuicao = ifelse(all(is.na(c(dfTAD))), NA, c(dfTAD)),
     NS = ifelse(is.na(NS), NA, NS),
     R2 = ifelse(is.na(R2), NA, R2),
     RMSE = ifelse(is.na(RMSE), NA, RMSE),

@@ -177,7 +177,7 @@ ScriptIDF <- function(StatesANA, Directory, Method, Isozona) {
 
             # Executar a otimização para cada equação e selecionar o melhor resultado
             best_result <- NULL
-            best_NS <- -Inf  # Inicializar com valor muito baixo para maximização
+            best_NS <- -Inf # Inicializar com valor muito baixo para maximização
 
             for (eq_number in 1:5) {
               result <- ScriptOtimiza(eq_number, TamanhoArquivDuracoes, TamanhoArquivTr, ArquivTr, ArquivDuracoes, IMaxObs)
@@ -249,7 +249,6 @@ ScriptIDF <- function(StatesANA, Directory, Method, Isozona) {
         row.names = FALSE,
         col.names = TRUE
       )
-
   } else {
     # Create list to receive results
     LatLon <- list()
@@ -298,7 +297,7 @@ ScriptIDF <- function(StatesANA, Directory, Method, Isozona) {
       modGEV <- ScriptTestAd(ArquivPrec)$modGEV
 
       if (is.null(modnormal) && is.null(modln) && is.null(modgamma) &&
-          is.null(modexpo) && is.null(modweibull) && is.null(modgumbel) && is.null(modGEV)) {
+        is.null(modexpo) && is.null(modweibull) && is.null(modgumbel) && is.null(modGEV)) {
         cat(paste0("ATTENTION, no distribution fits the station ", NomesAbas[t + 1], "!"))
         # Pass to the next station
         next
@@ -330,7 +329,7 @@ ScriptIDF <- function(StatesANA, Directory, Method, Isozona) {
 
         # Executar a otimização para cada equação e selecionar o melhor resultado
         best_result <- NULL
-        best_NS <- -Inf  # Inicializar com valor muito baixo para maximização
+        best_NS <- -Inf # Inicializar com valor muito baixo para maximização
 
         for (eq_number in 1:5) {
           result <- ScriptOtimiza(eq_number, TamanhoArquivDuracoes, TamanhoArquivTr, ArquivTr, ArquivDuracoes, IMaxObs)
