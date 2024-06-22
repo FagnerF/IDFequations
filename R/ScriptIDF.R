@@ -174,44 +174,26 @@ ScriptIDF <- function(StatesANA, Directory, Method, Isozona) {
               Method,
               Isozona
             )$IMaxObs
-            kotim <- ScriptOtimiza(
-              TamanhoArquivDuracoes,
-              TamanhoArquivTr,
-              ArquivTr,
-              ArquivDuracoes,
-              IMaxObs
-            )$kotim
-            motim <- ScriptOtimiza(
-              TamanhoArquivDuracoes,
-              TamanhoArquivTr,
-              ArquivTr,
-              ArquivDuracoes,
-              IMaxObs
-            )$motim
-            t0otim <- ScriptOtimiza(
-              TamanhoArquivDuracoes,
-              TamanhoArquivTr,
-              ArquivTr,
-              ArquivDuracoes,
-              IMaxObs
-            )$t0otim
-            notim <- ScriptOtimiza(
-              TamanhoArquivDuracoes,
-              TamanhoArquivTr,
-              ArquivTr,
-              ArquivDuracoes,
-              IMaxObs
-            )$notim
 
+            # Executar a otimização para cada equação e selecionar o melhor resultado
+            best_result <- NULL
+            best_NS <- -Inf  # Inicializar com valor muito baixo para maximização
+
+            for (eq_number in 1:5) {
+              result <- ScriptOtimiza(eq_number, TamanhoArquivDuracoes, TamanhoArquivTr, ArquivTr, ArquivDuracoes, IMaxObs)
+
+              # Verificar se result não é NULL e se NS é maior que best_NS
+              if (!is.null(result) && result$NS > best_NS) {
+                best_result <- result
+                best_NS <- result$NS
+              }
+            }
+
+            # Gerar tabela final de resultados
             TabelaResultados <- ScriptExit(
               TamanhoArquivDuracoes,
               TamanhoArquivTr,
-              kotim,
-              ArquivTr,
-              motim,
-              ArquivDuracoes,
-              t0otim,
-              notim,
+              best_result,
               ArquivPrec,
               IMaxObs,
               dfTAD
@@ -250,7 +232,7 @@ ScriptIDF <- function(StatesANA, Directory, Method, Isozona) {
       TableFinal$Longitude <- Longitude[1:length(tmp)]
 
       # Reorganizar as colunas
-      TableFinal <- TableFinal[, c(10:14, 1:9)]
+      TableFinal <- TableFinal[, c(14:16, 1:13)]
     } else {
       # Caso contrário, definir TableFinal como NULL
       TableFinal <- NULL
@@ -268,39 +250,6 @@ ScriptIDF <- function(StatesANA, Directory, Method, Isozona) {
         col.names = TRUE
       )
 
-    mapa <- leaflet(data = TableFinal[, -c(1:3,10:14)]) %>%
-      addTiles() %>%
-      setView(
-        lng = -49.265,
-        lat = -10.939,
-        zoom = 4
-      )
-
-    mapa <- mapa %>%
-      addMarkers(
-        lng = ~as.numeric(Longitude),
-        lat = ~as.numeric(Latitude),
-        label = ~ paste(
-          "Station",
-          "-",
-          Station,
-          ":",
-          "*",
-          "K:",
-          K,
-          "*",
-          "m:",
-          m,
-          "*",
-          "t0:",
-          t0,
-          "*",
-          "n:",
-          n
-        )
-      )
-
-    return(mapa)
   } else {
     # Create list to receive results
     LatLon <- list()
@@ -379,49 +328,25 @@ ScriptIDF <- function(StatesANA, Directory, Method, Isozona) {
           Isozona
         )$IMaxObs
 
-        # Otimizar parâmetros
-        kotim <- ScriptOtimiza(
-          TamanhoArquivDuracoes,
-          TamanhoArquivTr,
-          ArquivTr,
-          ArquivDuracoes,
-          IMaxObs
-        )$kotim
+        # Executar a otimização para cada equação e selecionar o melhor resultado
+        best_result <- NULL
+        best_NS <- -Inf  # Inicializar com valor muito baixo para maximização
 
-        motim <- ScriptOtimiza(
-          TamanhoArquivDuracoes,
-          TamanhoArquivTr,
-          ArquivTr,
-          ArquivDuracoes,
-          IMaxObs
-        )$motim
+        for (eq_number in 1:5) {
+          result <- ScriptOtimiza(eq_number, TamanhoArquivDuracoes, TamanhoArquivTr, ArquivTr, ArquivDuracoes, IMaxObs)
 
-        t0otim <- ScriptOtimiza(
-          TamanhoArquivDuracoes,
-          TamanhoArquivTr,
-          ArquivTr,
-          ArquivDuracoes,
-          IMaxObs
-        )$t0otim
-
-        notim <- ScriptOtimiza(
-          TamanhoArquivDuracoes,
-          TamanhoArquivTr,
-          ArquivTr,
-          ArquivDuracoes,
-          IMaxObs
-        )$notim
+          # Verificar se result não é NULL e se NS é maior que best_NS
+          if (!is.null(result) && result$NS > best_NS) {
+            best_result <- result
+            best_NS <- result$NS
+          }
+        }
 
         # Gerar tabela final de resultados
         TabelaResultados <- ScriptExit(
           TamanhoArquivDuracoes,
           TamanhoArquivTr,
-          kotim,
-          ArquivTr,
-          motim,
-          ArquivDuracoes,
-          t0otim,
-          notim,
+          best_result,
           ArquivPrec,
           IMaxObs,
           dfTAD
@@ -450,7 +375,7 @@ ScriptIDF <- function(StatesANA, Directory, Method, Isozona) {
       TableFinal$Longitude <- Longitude[1:length(tmp)]
 
       # Reorganizar as colunas para que as três últimas se tornem as três primeiras
-      TableFinal <- TableFinal[, c(10:12, 1:9)]
+      TableFinal <- TableFinal[, c(14:16, 1:13)]
     } else {
       # Caso contrário, definir TableFinal como NULL
       TableFinal <- NULL
@@ -467,40 +392,6 @@ ScriptIDF <- function(StatesANA, Directory, Method, Isozona) {
         row.names = FALSE,
         col.names = TRUE
       )
-
-    mapa <- leaflet(data = TableFinal[, -c(8:12)]) %>%
-      addTiles() %>%
-      setView(
-        lng = -49.265,
-        lat = -10.939,
-        zoom = 4
-      )
-
-    mapa <- mapa %>%
-      addMarkers(
-        lng = ~as.numeric(Longitude),
-        lat = ~as.numeric(Latitude),
-        label = ~ paste(
-          "Station",
-          "-",
-          Station,
-          ":",
-          "*",
-          "K:",
-          K,
-          "*",
-          "m:",
-          m,
-          "*",
-          "t0:",
-          t0,
-          "*",
-          "n:",
-          n
-        )
-      )
-
-    return(mapa)
 
     cat("\014")
 
