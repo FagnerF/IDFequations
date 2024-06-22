@@ -10,6 +10,10 @@ ScriptOtimiza <- function(eq_number, TamanhoArquivDuracoes, TamanhoArquivTr, Arq
   gotim <- NA_real_
   hotim <- NA_real_
 
+  IMaxSim <- matrix(0, TamanhoArquivDuracoes, TamanhoArquivTr)
+  erro <- matrix(0, TamanhoArquivDuracoes, TamanhoArquivTr)
+  Sum.erroInicial <- matrix(0, 1, TamanhoArquivTr)
+
   # Criar um dataframe vazio para armazenar os resultados
   results_df <- data.frame(
     Equation = integer(),
