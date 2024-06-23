@@ -1,13 +1,9 @@
 ScriptPMax24h <- function(X,
-                          TamanhoArquivDuracoes,
-                          TamanhoArquivTr,
                           ArquivDuracoes,
                           ArquivTr,
                           Method,
                           Isozona) {
-  my_list03 <- list()
-
-  IMaxObs <- NULL
+  IMaxObs <- matrix(0, length(ArquivDuracoes), length(ArquivTr))
 
   if (Method == "Isozona") {
     # Table KS
@@ -32,13 +28,13 @@ ScriptPMax24h <- function(X,
     # Reorganizar as colunas
     df <- df[, c(13, 1:12)]
 
-    PMax24h <- matrix(0, 1, TamanhoArquivTr)
-    PMax1h <- matrix(0, 1, TamanhoArquivTr)
-    PMax6min <- matrix(0, 1, TamanhoArquivTr)
+    PMax24h <- matrix(0, 1, length(ArquivTr))
+    PMax1h <- matrix(0, 1, length(ArquivTr))
+    PMax6min <- matrix(0, 1, length(ArquivTr))
 
-    for (w in 1:TamanhoArquivTr) {
+    for (w in 1:length(ArquivTr)) {
       PMax24h[w] <- X[w] * 1.095
-      if (w < TamanhoArquivTr) {
+      if (w < length(ArquivTr)) {
         PMax6min[w] <- PMax24h[w] * df[df$Isozonas == Isozona, as.character("Tr_5-50")]
       } else {
         PMax6min[w] <- PMax24h[w] * df[df$Isozonas == Isozona, as.character("Tr_100")]
@@ -83,13 +79,13 @@ ScriptPMax24h <- function(X,
 
     PMax <- round(matriz_interp, 1)
   } else if (Method == "CETESB") {
-    PMax <- matrix(0, TamanhoArquivDuracoes - 1, TamanhoArquivTr)
-    PMax24h <- matrix(0, 1, TamanhoArquivTr)
+    PMax <- matrix(0, length(ArquivDuracoes) - 1, length(ArquivTr))
+    PMax24h <- matrix(0, 1, length(ArquivTr))
 
-    for (b in 1:TamanhoArquivTr) {
+    for (b in 1:length(ArquivTr)) {
       PMax24h[b] <- X[b] * 1.14
 
-      for (f in 1:(TamanhoArquivDuracoes - 1)) {
+      for (f in 1:(length(ArquivDuracoes) - 1)) {
         PMax[f, b] <-
           PMax24h[b] * (exp(1.5 * log((
             log(ArquivDuracoes[f]) / 7.3
@@ -97,13 +93,13 @@ ScriptPMax24h <- function(X,
       }
     }
   } else if (Method == "Back") {
-    PMax <- matrix(0, TamanhoArquivDuracoes - 1, TamanhoArquivTr)
-    PMax24h <- matrix(0, 1, TamanhoArquivTr)
+    PMax <- matrix(0, length(ArquivDuracoes) - 1, length(ArquivTr))
+    PMax24h <- matrix(0, 1, length(ArquivTr))
 
-    for (b in 1:TamanhoArquivTr) {
+    for (b in 1:length(ArquivTr)) {
       PMax24h[b] <- X[b] * 1.14
 
-      for (f in 1:(TamanhoArquivDuracoes - 1)) {
+      for (f in 1:(length(ArquivDuracoes) - 1)) {
         PMax[f, b] <-
           (ArquivDuracoes[f] / (27.9327 + (3.8346 * (ArquivDuracoes[f])^0.7924))) * PMax24h[b]
       }
@@ -111,9 +107,9 @@ ScriptPMax24h <- function(X,
   }
 
   PMaxCorrig <-
-    matrix(0, TamanhoArquivDuracoes, TamanhoArquivTr)
+    matrix(0, length(ArquivDuracoes), length(ArquivTr))
 
-  for (l in 1:TamanhoArquivTr) {
+  for (l in 1:length(ArquivTr)) {
     PMaxCorrig[1, l] <- ifelse(PMax[1, l] < 8, 8, PMax[1, l])
     PMaxCorrig[2, l] <- ifelse(PMax[2, l] < 10, 10, PMax[2, l])
     PMaxCorrig[3, l] <- ifelse(PMax[3, l] < 15, 15, PMax[3, l])
@@ -126,15 +122,11 @@ ScriptPMax24h <- function(X,
     PMaxCorrig[10, l] <- ifelse(PMax24h[l] < 55, 55, PMax24h[l])
   }
 
-  IMaxObs <- matrix(0, TamanhoArquivDuracoes, TamanhoArquivTr)
-
-  for (f in 1:TamanhoArquivTr) {
-    for (g in 1:TamanhoArquivDuracoes) {
+  for (f in 1:length(ArquivTr)) {
+    for (g in 1:length(ArquivDuracoes)) {
       IMaxObs[g, f] <- (PMaxCorrig[g, f] / ArquivDuracoes[g]) * 60
     }
   }
 
-  my_list03 <- list(IMaxObs = IMaxObs)
-
-  return(my_list03)
+  return(IMaxObs)
 }

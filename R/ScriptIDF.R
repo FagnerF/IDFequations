@@ -165,22 +165,21 @@ ScriptIDF <- function(StatesANA, Directory, Method, Isozona) {
               modGEV
             )$X
 
+            # Calcular valores máximos observados
             IMaxObs <- ScriptPMax24h(
               X,
-              TamanhoArquivDuracoes,
-              TamanhoArquivTr,
               ArquivDuracoes,
               ArquivTr,
               Method,
               Isozona
-            )$IMaxObs
+            )
 
             # Executar a otimização para cada equação e selecionar o melhor resultado
             best_result <- NULL
             best_NS <- -Inf # Inicializar com valor muito baixo para maximização
 
             for (eq_number in 1:5) {
-              result <- ScriptOtimiza(eq_number, TamanhoArquivDuracoes, TamanhoArquivTr, ArquivTr, ArquivDuracoes, IMaxObs)
+              result <- ScriptOtimiza(eq_number, ArquivTr, ArquivDuracoes, IMaxObs)
 
               # Verificar se result não é NULL e se NS é maior que best_NS
               if (!is.null(result) && result$NS > best_NS) {
@@ -190,18 +189,16 @@ ScriptIDF <- function(StatesANA, Directory, Method, Isozona) {
             }
 
             # Gerar tabela final de resultados
-            TabelaResultados <- ScriptExit(
-              TamanhoArquivDuracoes,
-              TamanhoArquivTr,
-              ArquivTr,
+            TabFinal <- ScriptExit(
               ArquivDuracoes,
+              ArquivTr,
               best_result,
               IMaxObs,
               dfTAD
-            )$TabFinal
+            )
 
             # Armazenar resultados apenas se a estação tiver uma distribuição ajustada
-            tmp[[length(tmp) + 1]] <- TabelaResultados
+            tmp[[length(tmp) + 1]] <- TabFinal
 
             # Armazenar dados da estação
             State[length(tmp)] <- CodStat$State[i]
@@ -320,20 +317,18 @@ ScriptIDF <- function(StatesANA, Directory, Method, Isozona) {
         # Calcular valores máximos observados
         IMaxObs <- ScriptPMax24h(
           X,
-          TamanhoArquivDuracoes,
-          TamanhoArquivTr,
           ArquivDuracoes,
           ArquivTr,
           Method,
           Isozona
-        )$IMaxObs
+        )
 
         # Executar a otimização para cada equação e selecionar o melhor resultado
         best_result <- NULL
         best_NS <- -Inf # Inicializar com valor muito baixo para maximização
 
         for (eq_number in 1:5) {
-          result <- ScriptOtimiza(eq_number, TamanhoArquivDuracoes, TamanhoArquivTr, ArquivTr, ArquivDuracoes, IMaxObs)
+          result <- ScriptOtimiza(eq_number, ArquivTr, ArquivDuracoes, IMaxObs)
 
           # Verificar se result não é NULL e se NS é maior que best_NS
           if (!is.null(result) && result$NS > best_NS) {
@@ -343,18 +338,16 @@ ScriptIDF <- function(StatesANA, Directory, Method, Isozona) {
         }
 
         # Gerar tabela final de resultados
-        TabelaResultados <- ScriptExit(
-          TamanhoArquivDuracoes,
-          TamanhoArquivTr,
-          ArquivTr,
+        TabFinal <- ScriptExit(
           ArquivDuracoes,
+          ArquivTr,
           best_result,
           IMaxObs,
           dfTAD
-        )$TabFinal
+        )
 
         # Armazenar resultados apenas se a estação tiver uma distribuição ajustada
-        tmp[[length(tmp) + 1]] <- TabelaResultados
+        tmp[[length(tmp) + 1]] <- TabFinal
 
         # Armazenar dados da estação
         Station[length(tmp)] <- NomesAbas[t + 1]

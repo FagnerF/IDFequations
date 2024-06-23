@@ -134,7 +134,7 @@ ScriptIDFCLIMBra <-
       modGEV <- ScriptTestAd(ArquivPrec)$modGEV
 
       if (is.null(modnormal) && is.null(modln) && is.null(modgamma) &&
-          is.null(modexpo) && is.null(modweibull) && is.null(modgumbel) && is.null(modGEV)) {
+        is.null(modexpo) && is.null(modweibull) && is.null(modgumbel) && is.null(modGEV)) {
         cat(paste0("ATTENTION, no distribution fits the station ", Station[t], "!"))
         # Pass to the next station
         next
@@ -153,22 +153,21 @@ ScriptIDFCLIMBra <-
           modGEV
         )$X
 
+        # Calcular valores máximos observados
         IMaxObs <- ScriptPMax24h(
           X,
-          TamanhoArquivDuracoes,
-          TamanhoArquivTr,
           ArquivDuracoes,
           ArquivTr,
           Method,
           Isozona
-        )$IMaxObs
+        )
 
         # Executar a otimização para cada equação e selecionar o melhor resultado
         best_result <- NULL
-        best_NS <- -Inf  # Inicializar com valor muito baixo para maximização
+        best_NS <- -Inf # Inicializar com valor muito baixo para maximização
 
         for (eq_number in 1:5) {
-          result <- ScriptOtimiza(eq_number, TamanhoArquivDuracoes, TamanhoArquivTr, ArquivTr, ArquivDuracoes, IMaxObs)
+          result <- ScriptOtimiza(eq_number, ArquivTr, ArquivDuracoes, IMaxObs)
 
           # Verificar se result não é NULL e se NS é maior que best_NS
           if (!is.null(result) && result$NS > best_NS) {
@@ -178,18 +177,16 @@ ScriptIDFCLIMBra <-
         }
 
         # Gerar tabela final de resultados
-        TabelaResultados <- ScriptExit(
-          TamanhoArquivDuracoes,
-          TamanhoArquivTr,
-          ArquivTr,
+        TabFinal <- ScriptExit(
           ArquivDuracoes,
+          ArquivTr,
           best_result,
           IMaxObs,
           dfTAD
-        )$TabFinal
+        )
 
         # Armazenar resultados apenas se a estação tiver uma distribuição ajustada
-        tmp[[length(tmp) + 1]] <- TabelaResultados
+        tmp[[length(tmp) + 1]] <- TabFinal
 
         # Armazenar dados da estação
         Station[length(tmp)] <- Station[t]

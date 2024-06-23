@@ -1,28 +1,17 @@
 # Generates a table containing the main results
-ScriptExit <- function(TamanhoArquivDuracoes,
-                       TamanhoArquivTr,
-                       ArquivDuracoes,
+ScriptExit <- function(ArquivDuracoes,
                        ArquivTr,
                        best_result,
                        IMaxObs,
                        dfTAD) {
-  my_list05 <- list()
+  # Cria o dataframe TabFinal
+  TabFinal <- matrix(NA, nrow = 1, ncol = 13)
 
-  TabFinal <- matrix(NA, 1, 13)
-  a <- NA_real_
-  b <- NA_real_
-  c <- NA_real_
-  d <- NA_real_
-  e <- NA_real_
-  f <- NA_real_
-  g <- NA_real_
-  h <- NA_real_
+  IMaxSim <- matrix(0, nrow = length(ArquivDuracoes), ncol = length(ArquivTr))
 
-  IMaxSim <- matrix(0, TamanhoArquivDuracoes, TamanhoArquivTr)
+  eq <- best_result$Equation
 
-  eq_number <- best_result$Equation
-
-  if (eq_number == 1) {
+  if (eq == 1) {
     for (j in 1:TamanhoArquivTr) {
       for (i in 1:TamanhoArquivDuracoes) {
         IMaxSim[i, j] <- (best_result$aotim * (ArquivTr[j])^best_result$botim) / ((ArquivDuracoes[i] + best_result$cotim)^best_result$dotim)
@@ -33,14 +22,7 @@ ScriptExit <- function(TamanhoArquivDuracoes,
     b <- c(round(best_result$botim, 3))
     c <- c(round(best_result$cotim, 2))
     d <- c(round(best_result$dotim, 3))
-
-    NS <- c(abs(round(min(
-      hydroGOF::NSE(IMaxSim, IMaxObs)
-    ), 3)))
-    R2 <- c(round(min(hydroGOF::br2(IMaxSim, IMaxObs)), 3))
-    RMSE <- c(round(max(hydroGOF::rmse(IMaxSim, IMaxObs)), 3))
-    MAE <- c(round(max(hydroGOF::mae(IMaxSim, IMaxObs)), 3))
-  } else if (eq_number == 2) {
+  } else if (eq == 2) {
     for (j in 1:TamanhoArquivTr) {
       for (i in 1:TamanhoArquivDuracoes) {
         IMaxSim[i, j] <- (best_result$aotim * (ArquivTr[j])^best_result$botim) / ((ArquivDuracoes[i] + best_result$cotim)^(best_result$dotim * (ArquivTr[j])^best_result$eotim))
@@ -52,14 +34,7 @@ ScriptExit <- function(TamanhoArquivDuracoes,
     c <- c(round(best_result$cotim, 2))
     d <- c(round(best_result$dotim, 3))
     e <- c(round(best_result$eotim, 3))
-
-    NS <- c(abs(round(min(
-      hydroGOF::NSE(IMaxSim, IMaxObs)
-    ), 3)))
-    R2 <- c(round(min(hydroGOF::br2(IMaxSim, IMaxObs)), 3))
-    RMSE <- c(round(max(hydroGOF::rmse(IMaxSim, IMaxObs)), 3))
-    MAE <- c(round(max(hydroGOF::mae(IMaxSim, IMaxObs)), 3))
-  } else if (eq_number == 3) {
+  } else if (eq == 3) {
     for (j in 1:TamanhoArquivTr) {
       for (i in 1:TamanhoArquivDuracoes) {
         IMaxSim[i, j] <- ((best_result$aotim * (ArquivDuracoes[j] + best_result$botim)^best_result$cotim) + (best_result$dotim * (ArquivDuracoes[j] + best_result$eotim)^best_result$fotim) * (best_result$gotim + best_result$hotim * log(log(ArquivTr[i] / (ArquivTr[i] - 1))))) * 60
@@ -74,14 +49,7 @@ ScriptExit <- function(TamanhoArquivDuracoes,
     f <- c(round(best_result$fotim, 3))
     g <- c(round(best_result$gotim, 2))
     h <- c(round(best_result$hotim, 3))
-
-    NS <- c(abs(round(min(
-      hydroGOF::NSE(IMaxSim, IMaxObs)
-    ), 3)))
-    R2 <- c(round(min(hydroGOF::br2(IMaxSim, IMaxObs)), 3))
-    RMSE <- c(round(max(hydroGOF::rmse(IMaxSim, IMaxObs)), 3))
-    MAE <- c(round(max(hydroGOF::mae(IMaxSim, IMaxObs)), 3))
-  } else if (eq_number == 4) {
+  } else if (eq == 4) {
     for (j in 1:TamanhoArquivTr) {
       for (i in 1:TamanhoArquivDuracoes) {
         IMaxSim[i, j] <- (best_result$aotim * (ArquivTr[j] - best_result$botim)^best_result$cotim) / (((best_result$dotim * ArquivDuracoes[i]) + best_result$eotim)^best_result$fotim)
@@ -94,14 +62,7 @@ ScriptExit <- function(TamanhoArquivDuracoes,
     d <- c(round(best_result$dotim, 3))
     e <- c(round(best_result$eotim, 3))
     f <- c(round(best_result$fotim, 3))
-
-    NS <- c(abs(round(min(
-      hydroGOF::NSE(IMaxSim, IMaxObs)
-    ), 3)))
-    R2 <- c(round(min(hydroGOF::br2(IMaxSim, IMaxObs)), 3))
-    RMSE <- c(round(max(hydroGOF::rmse(IMaxSim, IMaxObs)), 3))
-    MAE <- c(round(max(hydroGOF::mae(IMaxSim, IMaxObs)), 3))
-  } else if (eq_number == 5) {
+  } else if (eq == 5) {
     for (j in 1:TamanhoArquivTr) {
       for (i in 1:TamanhoArquivDuracoes) {
         IMaxSim[i, j] <- (best_result$aotim * (ArquivTr[j] + best_result$botim)^best_result$cotim) / ((ArquivDuracoes[i] + best_result$dotim)^best_result$eotim)
@@ -113,32 +74,16 @@ ScriptExit <- function(TamanhoArquivDuracoes,
     c <- c(round(best_result$cotim, 2))
     d <- c(round(best_result$dotim, 3))
     e <- c(round(best_result$eotim, 3))
-
-    NS <- c(abs(round(min(
-      hydroGOF::NSE(IMaxSim, IMaxObs)
-    ), 3)))
-    R2 <- c(round(min(hydroGOF::br2(IMaxSim, IMaxObs)), 3))
-    RMSE <- c(round(max(hydroGOF::rmse(IMaxSim, IMaxObs)), 3))
-    MAE <- c(round(max(hydroGOF::mae(IMaxSim, IMaxObs)), 3))
   }
 
-  # Criar TabFinal, definindo NA explicitamente
-  # TabFinal <- data.frame(
-  #   a = ifelse(all(is.na(a)), NA, a),
-  #   b = ifelse(all(is.na(b)), NA, b),
-  #   c = ifelse(all(is.na(c)), NA, c),
-  #   d = ifelse(all(is.na(d)), NA, d),
-  #   e = ifelse(all(is.na(e)), NA, e),
-  #   f = ifelse(all(is.na(f)), NA, f),
-  #   g = ifelse(all(is.na(g)), NA, g),
-  #   h = ifelse(all(is.na(h)), NA, h),
-  #   Distribuicao = ifelse(all(is.na(c(dfTAD))), NA, c(dfTAD)),
-  #   NS = ifelse(is.na(NS), NA, NS),
-  #   R2 = ifelse(is.na(R2), NA, R2),
-  #   RMSE = ifelse(is.na(RMSE), NA, RMSE),
-  #   MAE = ifelse(is.na(MAE), NA, MAE)
-  # )
+  NS <- c(abs(round(min(
+    hydroGOF::NSE(IMaxSim, IMaxObs)
+  ), 3)))
+  R2 <- c(round(min(hydroGOF::br2(IMaxSim, IMaxObs)), 3))
+  RMSE <- c(round(max(hydroGOF::rmse(IMaxSim, IMaxObs)), 3))
+  MAE <- c(round(max(hydroGOF::mae(IMaxSim, IMaxObs)), 3))
 
+  # Cria o dataframe TabFinal, definindo NA explicitamente
   TabFinal <- data.frame(
     a = a,
     b = b,
@@ -152,10 +97,9 @@ ScriptExit <- function(TamanhoArquivDuracoes,
     NS = NS,
     R2 = R2,
     RMSE = RMSE,
-    MAE = MAE
+    MAE = MAE,
+    stringsAsFactors = FALSE
   )
 
-  my_list05 <- list(TabFinal = TabFinal)
-
-  return(my_list05)
+  return(TabFinal)
 }
