@@ -31,13 +31,11 @@ ScriptIDF <- function(StatesANA, Directory, Method, Isozona) {
   tmp <- NULL
 
   ArquivTr <- c(5, 10, 15, 20, 25, 50, 100) # (years)
-  TamanhoArquivTr <- length(ArquivTr)
 
   Probab <- 1 / ArquivTr
 
   ArquivDuracoes <-
     c(6, 10, 15, 20, 30, 60, 360, 480, 720, 1440) # (minutes)
-  TamanhoArquivDuracoes <- length(ArquivDuracoes)
 
   stationType <- 2
 
@@ -230,7 +228,7 @@ ScriptIDF <- function(StatesANA, Directory, Method, Isozona) {
       TableFinal$Longitude <- Longitude[1:length(tmp)]
 
       # Reorganizar as colunas
-      TableFinal <- TableFinal[, c(14:16, 1:13)]
+      TableFinal <- TableFinal[, c(15:16, 1:14)]
     } else {
       # Caso contrário, definir TableFinal como NULL
       TableFinal <- NULL

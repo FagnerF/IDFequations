@@ -4,8 +4,11 @@ ScriptExit <- function(ArquivDuracoes,
                        best_result,
                        IMaxObs,
                        dfTAD) {
-  # Cria o dataframe TabFinal
-  TabFinal <- matrix(NA, nrow = 1, ncol = 13)
+
+  # Criar a matriz com NA e definir os nomes das colunas
+  TabFinal <- matrix(NA, nrow = 1, ncol = 13) %>%
+    as.data.frame() %>%
+    setNames(c("a", "b", "c", "d", "e", "f", "g", "h", "Distribution", "NS", "R2", "RMSE", "MAE"))
 
   IMaxSim <- matrix(0, nrow = length(ArquivDuracoes), ncol = length(ArquivTr))
 
@@ -22,6 +25,32 @@ ScriptExit <- function(ArquivDuracoes,
     b <- c(round(best_result$botim, 3))
     c <- c(round(best_result$cotim, 2))
     d <- c(round(best_result$dotim, 3))
+
+    NS <- c(abs(round(min(
+      hydroGOF::NSE(IMaxSim, IMaxObs)
+    ), 3)))
+    R2 <- c(round(min(hydroGOF::br2(IMaxSim, IMaxObs)), 3))
+    RMSE <- c(round(max(hydroGOF::rmse(IMaxSim, IMaxObs)), 3))
+    MAE <- c(round(max(hydroGOF::mae(IMaxSim, IMaxObs)), 3))
+
+    # Cria o dataframe TabFinal, definindo NA explicitamente
+    TabFinal <- data.frame(
+      a = a,
+      b = b,
+      c = c,
+      d = d,
+      e = NA,
+      f = NA,
+      g = NA,
+      h = NA,
+      Distribution = dfTAD,
+      NS = NS,
+      R2 = R2,
+      RMSE = RMSE,
+      MAE = MAE,
+      stringsAsFactors = FALSE
+    )
+
   } else if (eq == 2) {
     for (j in 1:length(ArquivTr)) {
       for (i in 1:length(ArquivDuracoes)) {
@@ -34,6 +63,32 @@ ScriptExit <- function(ArquivDuracoes,
     c <- c(round(best_result$cotim, 2))
     d <- c(round(best_result$dotim, 3))
     e <- c(round(best_result$eotim, 3))
+
+    NS <- c(abs(round(min(
+      hydroGOF::NSE(IMaxSim, IMaxObs)
+    ), 3)))
+    R2 <- c(round(min(hydroGOF::br2(IMaxSim, IMaxObs)), 3))
+    RMSE <- c(round(max(hydroGOF::rmse(IMaxSim, IMaxObs)), 3))
+    MAE <- c(round(max(hydroGOF::mae(IMaxSim, IMaxObs)), 3))
+
+    # Cria o dataframe TabFinal, definindo NA explicitamente
+    TabFinal <- data.frame(
+      a = a,
+      b = b,
+      c = c,
+      d = d,
+      e = e,
+      f = NA,
+      g = NA,
+      h = NA,
+      Distribution = dfTAD,
+      NS = NS,
+      R2 = R2,
+      RMSE = RMSE,
+      MAE = MAE,
+      stringsAsFactors = FALSE
+    )
+
   } else if (eq == 3) {
     for (j in 1:length(ArquivTr)) {
       for (i in 1:length(ArquivDuracoes)) {
@@ -49,6 +104,32 @@ ScriptExit <- function(ArquivDuracoes,
     f <- c(round(best_result$fotim, 3))
     g <- c(round(best_result$gotim, 2))
     h <- c(round(best_result$hotim, 3))
+
+    NS <- c(abs(round(min(
+      hydroGOF::NSE(IMaxSim, IMaxObs)
+    ), 3)))
+    R2 <- c(round(min(hydroGOF::br2(IMaxSim, IMaxObs)), 3))
+    RMSE <- c(round(max(hydroGOF::rmse(IMaxSim, IMaxObs)), 3))
+    MAE <- c(round(max(hydroGOF::mae(IMaxSim, IMaxObs)), 3))
+
+    # Cria o dataframe TabFinal, definindo NA explicitamente
+    TabFinal <- data.frame(
+      a = a,
+      b = b,
+      c = c,
+      d = d,
+      e = e,
+      f = f,
+      g = g,
+      h = h,
+      Distribution = dfTAD,
+      NS = NS,
+      R2 = R2,
+      RMSE = RMSE,
+      MAE = MAE,
+      stringsAsFactors = FALSE
+    )
+
   } else if (eq == 4) {
     for (j in 1:length(ArquivTr)) {
       for (i in 1:length(ArquivDuracoes)) {
@@ -62,6 +143,32 @@ ScriptExit <- function(ArquivDuracoes,
     d <- c(round(best_result$dotim, 3))
     e <- c(round(best_result$eotim, 3))
     f <- c(round(best_result$fotim, 3))
+
+    NS <- c(abs(round(min(
+      hydroGOF::NSE(IMaxSim, IMaxObs)
+    ), 3)))
+    R2 <- c(round(min(hydroGOF::br2(IMaxSim, IMaxObs)), 3))
+    RMSE <- c(round(max(hydroGOF::rmse(IMaxSim, IMaxObs)), 3))
+    MAE <- c(round(max(hydroGOF::mae(IMaxSim, IMaxObs)), 3))
+
+    # Cria o dataframe TabFinal, definindo NA explicitamente
+    TabFinal <- data.frame(
+      a = a,
+      b = b,
+      c = c,
+      d = d,
+      e = e,
+      f = f,
+      g = NA,
+      h = NA,
+      Distribution = dfTAD,
+      NS = NS,
+      R2 = R2,
+      RMSE = RMSE,
+      MAE = MAE,
+      stringsAsFactors = FALSE
+    )
+
   } else if (eq == 5) {
     for (j in 1:length(ArquivTr)) {
       for (i in 1:length(ArquivDuracoes)) {
@@ -74,32 +181,33 @@ ScriptExit <- function(ArquivDuracoes,
     c <- c(round(best_result$cotim, 2))
     d <- c(round(best_result$dotim, 3))
     e <- c(round(best_result$eotim, 3))
+
+    NS <- c(abs(round(min(
+      hydroGOF::NSE(IMaxSim, IMaxObs)
+    ), 3)))
+    R2 <- c(round(min(hydroGOF::br2(IMaxSim, IMaxObs)), 3))
+    RMSE <- c(round(max(hydroGOF::rmse(IMaxSim, IMaxObs)), 3))
+    MAE <- c(round(max(hydroGOF::mae(IMaxSim, IMaxObs)), 3))
+
+    # Cria o dataframe TabFinal, definindo NA explicitamente
+    TabFinal <- data.frame(
+      a = a,
+      b = b,
+      c = c,
+      d = d,
+      e = e,
+      f = NA,
+      g = NA,
+      h = NA,
+      Distribution = dfTAD,
+      NS = NS,
+      R2 = R2,
+      RMSE = RMSE,
+      MAE = MAE,
+      stringsAsFactors = FALSE
+    )
+
   }
-
-  NS <- c(abs(round(min(
-    hydroGOF::NSE(IMaxSim, IMaxObs)
-  ), 3)))
-  R2 <- c(round(min(hydroGOF::br2(IMaxSim, IMaxObs)), 3))
-  RMSE <- c(round(max(hydroGOF::rmse(IMaxSim, IMaxObs)), 3))
-  MAE <- c(round(max(hydroGOF::mae(IMaxSim, IMaxObs)), 3))
-
-  # Cria o dataframe TabFinal, definindo NA explicitamente
-  TabFinal <- data.frame(
-    a = a,
-    b = b,
-    c = c,
-    d = d,
-    e = e,
-    f = f,
-    g = g,
-    h = h,
-    Distribuicao = dfTAD,
-    NS = NS,
-    R2 = R2,
-    RMSE = RMSE,
-    MAE = MAE,
-    stringsAsFactors = FALSE
-  )
 
   return(TabFinal)
 }
