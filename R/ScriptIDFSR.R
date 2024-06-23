@@ -164,8 +164,9 @@ ScriptIDFSR <- function(Station, LatSR, LonSR, Directory, Method, Isozona) {
       TabelaResultados <- ScriptExit(
         TamanhoArquivDuracoes,
         TamanhoArquivTr,
+        ArquivTr,
+        ArquivDuracoes,
         best_result,
-        ArquivPrec,
         IMaxObs,
         dfTAD
       )$TabFinal

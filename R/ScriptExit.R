@@ -1,13 +1,13 @@
 # Generates a table containing the main results
 ScriptExit <- function(TamanhoArquivDuracoes,
                        TamanhoArquivTr,
+                       ArquivDuracoes,
+                       ArquivTr,
                        best_result,
-                       ArquivPrec,
                        IMaxObs,
                        dfTAD) {
   my_list05 <- list()
 
-  TabFinal <- matrix(NA, 3, 16)
   a <- NA_real_
   b <- NA_real_
   c <- NA_real_

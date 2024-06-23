@@ -181,8 +181,9 @@ ScriptIDFCLIMBra <-
         TabelaResultados <- ScriptExit(
           TamanhoArquivDuracoes,
           TamanhoArquivTr,
+          ArquivTr,
+          ArquivDuracoes,
           best_result,
-          ArquivPrec,
           IMaxObs,
           dfTAD
         )$TabFinal
