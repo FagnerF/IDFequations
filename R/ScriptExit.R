@@ -8,6 +8,7 @@ ScriptExit <- function(TamanhoArquivDuracoes,
                        dfTAD) {
   my_list05 <- list()
 
+  TabFinal <- matrix(NA, 1, 13)
   a <- NA_real_
   b <- NA_real_
   c <- NA_real_
@@ -122,20 +123,36 @@ ScriptExit <- function(TamanhoArquivDuracoes,
   }
 
   # Criar TabFinal, definindo NA explicitamente
+  # TabFinal <- data.frame(
+  #   a = ifelse(all(is.na(a)), NA, a),
+  #   b = ifelse(all(is.na(b)), NA, b),
+  #   c = ifelse(all(is.na(c)), NA, c),
+  #   d = ifelse(all(is.na(d)), NA, d),
+  #   e = ifelse(all(is.na(e)), NA, e),
+  #   f = ifelse(all(is.na(f)), NA, f),
+  #   g = ifelse(all(is.na(g)), NA, g),
+  #   h = ifelse(all(is.na(h)), NA, h),
+  #   Distribuicao = ifelse(all(is.na(c(dfTAD))), NA, c(dfTAD)),
+  #   NS = ifelse(is.na(NS), NA, NS),
+  #   R2 = ifelse(is.na(R2), NA, R2),
+  #   RMSE = ifelse(is.na(RMSE), NA, RMSE),
+  #   MAE = ifelse(is.na(MAE), NA, MAE)
+  # )
+
   TabFinal <- data.frame(
-    a = ifelse(all(is.na(a)), NA, a),
-    b = ifelse(all(is.na(b)), NA, b),
-    c = ifelse(all(is.na(c)), NA, c),
-    d = ifelse(all(is.na(d)), NA, d),
-    e = ifelse(all(is.na(e)), NA, e),
-    f = ifelse(all(is.na(f)), NA, f),
-    g = ifelse(all(is.na(g)), NA, g),
-    h = ifelse(all(is.na(h)), NA, h),
-    Distribuicao = ifelse(all(is.na(c(dfTAD))), NA, c(dfTAD)),
-    NS = ifelse(is.na(NS), NA, NS),
-    R2 = ifelse(is.na(R2), NA, R2),
-    RMSE = ifelse(is.na(RMSE), NA, RMSE),
-    MAE = ifelse(is.na(MAE), NA, MAE)
+    a = a,
+    b = b,
+    c = c,
+    d = d,
+    e = e,
+    f = f,
+    g = g,
+    h = h,
+    Distribuicao = dfTAD,
+    NS = NS,
+    R2 = R2,
+    RMSE = RMSE,
+    MAE = MAE
   )
 
   my_list05 <- list(TabFinal = TabFinal)
