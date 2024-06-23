@@ -12,8 +12,8 @@ ScriptExit <- function(ArquivDuracoes,
   eq <- best_result$Equation
 
   if (eq == 1) {
-    for (j in 1:TamanhoArquivTr) {
-      for (i in 1:TamanhoArquivDuracoes) {
+    for (j in 1:length(ArquivTr)) {
+      for (i in 1:length(ArquivDuracoes)) {
         IMaxSim[i, j] <- (best_result$aotim * (ArquivTr[j])^best_result$botim) / ((ArquivDuracoes[i] + best_result$cotim)^best_result$dotim)
       }
     }
@@ -23,8 +23,8 @@ ScriptExit <- function(ArquivDuracoes,
     c <- c(round(best_result$cotim, 2))
     d <- c(round(best_result$dotim, 3))
   } else if (eq == 2) {
-    for (j in 1:TamanhoArquivTr) {
-      for (i in 1:TamanhoArquivDuracoes) {
+    for (j in 1:length(ArquivTr)) {
+      for (i in 1:length(ArquivDuracoes)) {
         IMaxSim[i, j] <- (best_result$aotim * (ArquivTr[j])^best_result$botim) / ((ArquivDuracoes[i] + best_result$cotim)^(best_result$dotim * (ArquivTr[j])^best_result$eotim))
       }
     }
@@ -35,8 +35,8 @@ ScriptExit <- function(ArquivDuracoes,
     d <- c(round(best_result$dotim, 3))
     e <- c(round(best_result$eotim, 3))
   } else if (eq == 3) {
-    for (j in 1:TamanhoArquivTr) {
-      for (i in 1:TamanhoArquivDuracoes) {
+    for (j in 1:length(ArquivTr)) {
+      for (i in 1:length(ArquivDuracoes)) {
         IMaxSim[i, j] <- ((best_result$aotim * (ArquivDuracoes[j] + best_result$botim)^best_result$cotim) + (best_result$dotim * (ArquivDuracoes[j] + best_result$eotim)^best_result$fotim) * (best_result$gotim + best_result$hotim * log(log(ArquivTr[i] / (ArquivTr[i] - 1))))) * 60
       }
     }
@@ -50,8 +50,8 @@ ScriptExit <- function(ArquivDuracoes,
     g <- c(round(best_result$gotim, 2))
     h <- c(round(best_result$hotim, 3))
   } else if (eq == 4) {
-    for (j in 1:TamanhoArquivTr) {
-      for (i in 1:TamanhoArquivDuracoes) {
+    for (j in 1:length(ArquivTr)) {
+      for (i in 1:length(ArquivDuracoes)) {
         IMaxSim[i, j] <- (best_result$aotim * (ArquivTr[j] - best_result$botim)^best_result$cotim) / (((best_result$dotim * ArquivDuracoes[i]) + best_result$eotim)^best_result$fotim)
       }
     }
@@ -63,8 +63,8 @@ ScriptExit <- function(ArquivDuracoes,
     e <- c(round(best_result$eotim, 3))
     f <- c(round(best_result$fotim, 3))
   } else if (eq == 5) {
-    for (j in 1:TamanhoArquivTr) {
-      for (i in 1:TamanhoArquivDuracoes) {
+    for (j in 1:length(ArquivTr)) {
+      for (i in 1:length(ArquivDuracoes)) {
         IMaxSim[i, j] <- (best_result$aotim * (ArquivTr[j] + best_result$botim)^best_result$cotim) / ((ArquivDuracoes[i] + best_result$dotim)^best_result$eotim)
       }
     }
