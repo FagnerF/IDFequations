@@ -47,6 +47,7 @@ ScriptIDF <- function(StatesANA, Directory, Method, Isozona) {
     Station <- vector("numeric", length = nrow(CodStat))
     Latitude <- vector("numeric", length = nrow(CodStat))
     Longitude <- vector("numeric", length = nrow(CodStat))
+    Equation <- vector("characte", length = nrow(CodStat))
 
     cat("\n")
 
