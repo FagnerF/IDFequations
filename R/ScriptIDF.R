@@ -204,6 +204,7 @@ ScriptIDF <- function(StatesANA, Directory, Method, Isozona) {
             Station[length(tmp)] <- CodStat$codstation[i]
             Latitude[length(tmp)] <- CodStat$lat[i]
             Longitude[length(tmp)] <- CodStat$long[i]
+            Equation[length(tmp)] <- best_result$Equation
 
             cat("\014")
           }
@@ -226,9 +227,10 @@ ScriptIDF <- function(StatesANA, Directory, Method, Isozona) {
       TableFinal$Station <- Station[1:length(tmp)]
       TableFinal$Latitude <- Latitude[1:length(tmp)]
       TableFinal$Longitude <- Longitude[1:length(tmp)]
+      TableFinal$Equation <- Equation[1:length(tmp)]
 
       # Reorganizar as colunas
-      TableFinal <- TableFinal[, c(14:18, 1:13)]
+      TableFinal <- TableFinal[, c(12:17, 1:11)]
     } else {
       # Caso contrário, definir TableFinal como NULL
       TableFinal <- NULL
@@ -351,6 +353,7 @@ ScriptIDF <- function(StatesANA, Directory, Method, Isozona) {
         Station[length(tmp)] <- NomesAbas[t + 1]
         Latitude[length(tmp)] <- LatLon$Latitude[t]
         Longitude[length(tmp)] <- LatLon$Longitude[t]
+        Equation[length(tmp)] <- best_result$Equation
       }
 
       cat("\014")
@@ -365,9 +368,10 @@ ScriptIDF <- function(StatesANA, Directory, Method, Isozona) {
       TableFinal$Station <- Station[1:length(tmp)]
       TableFinal$Latitude <- Latitude[1:length(tmp)]
       TableFinal$Longitude <- Longitude[1:length(tmp)]
+      TableFinal$Equation <- Equation[1:length(tmp)]
 
       # Reorganizar as colunas para que as três últimas se tornem as três primeiras
-      TableFinal <- TableFinal[, c(14:16, 1:13)]
+      TableFinal <- TableFinal[, c(12:15, 1:11)]
     } else {
       # Caso contrário, definir TableFinal como NULL
       TableFinal <- NULL

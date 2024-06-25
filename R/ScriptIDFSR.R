@@ -175,6 +175,7 @@ ScriptIDFSR <- function(Station, LatSR, LonSR, Directory, Method, Isozona) {
       Station[length(tmp)] <- Station[t]
       Latitude[length(tmp)] <- LatSR[t]
       Longitude[length(tmp)] <- LonSR[t]
+      Equation[length(tmp)] <- best_result$Equation
     }
 
     cat("\014")
@@ -189,9 +190,10 @@ ScriptIDFSR <- function(Station, LatSR, LonSR, Directory, Method, Isozona) {
     TableFinal$Station <- Station[1:length(tmp)]
     TableFinal$Latitude <- Latitude[1:length(tmp)]
     TableFinal$Longitude <- Longitude[1:length(tmp)]
+    TableFinal$Equation <- Equation[1:length(tmp)]
 
     # Reorganizar as colunas para que as três últimas se tornem as três primeiras
-    TableFinal <- TableFinal[, c(14:16, 1:13)]
+    TableFinal <- TableFinal[, c(12:15, 1:11)]
   } else {
     # Caso contrário, definir TableFinal como NULL
     TableFinal <- NULL
