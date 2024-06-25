@@ -321,7 +321,7 @@ ScriptOtimiza <- function(eq_number, ArquivTr, ArquivDuracoes, IMaxObs) {
   }
 
   # Calcular o valor de NS após otimização
-  NS_value <- function.NS(c(aotim, botim, cotim, dotim, eotim, fotim, gotim, hotim))
+  NS_value <- function.NS(c(aotim, botim, cotim, dotim, eotim, fotim))
 
   # Criar um row para o dataframe de resultados
   result <- data.frame(
