@@ -228,7 +228,7 @@ ScriptIDF <- function(StatesANA, Directory, Method, Isozona) {
       TableFinal$Longitude <- Longitude[1:length(tmp)]
 
       # Reorganizar as colunas
-      TableFinal <- TableFinal[, c(15:16, 1:14)]
+      TableFinal <- TableFinal[, c(14:18, 1:13)]
     } else {
       # Caso contrário, definir TableFinal como NULL
       TableFinal <- NULL
