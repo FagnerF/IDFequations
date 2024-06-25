@@ -37,7 +37,7 @@ ScriptIDFCLIMBra <-
     Station <- vector("character", length = length(Station))
     Latitude <- vector("numeric", length = length(Station))
     Longitude <- vector("numeric", length = length(Station))
-    Equation <- vector("characte", length = nrow(CodStat))
+    Equation <- vector("character", length = nrow(CodStat))
 
     ArquivTr <- c(2, 5, 10, 15, 20, 25, 50, 75, 100) # (years)
     TamanhoArquivTr <- length(ArquivTr)
