@@ -264,6 +264,7 @@ ScriptIDF <- function(StatesANA, Directory, Method, Isozona) {
     Station <- vector("character", length = iteration)
     Latitude <- vector("numeric", length = iteration)
     Longitude <- vector("numeric", length = iteration)
+    Equation <- vector("numeric", length = iteration)
 
     for (t in 1:iteration) {
       cat("== Working on the data ==", "\n")
