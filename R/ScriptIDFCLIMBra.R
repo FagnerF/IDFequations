@@ -37,7 +37,7 @@ ScriptIDFCLIMBra <-
     Station <- vector("character", length = length(Station))
     Latitude <- vector("numeric", length = length(Station))
     Longitude <- vector("numeric", length = length(Station))
-    Equation <- vector("character", length = nrow(CodStat))
+    Equation <- vector("character", length = length(Station))
 
     ArquivTr <- c(2, 5, 10, 15, 20, 25, 50, 75, 100) # (years)
     TamanhoArquivTr <- length(ArquivTr)
@@ -167,7 +167,7 @@ ScriptIDFCLIMBra <-
         best_result <- NULL
         best_NS <- -Inf # Inicializar com valor muito baixo para maximização
 
-        for (eq_number in 1:5) {
+        for (eq_number in 1:4) {
           result <- ScriptOtimiza(eq_number, ArquivTr, ArquivDuracoes, IMaxObs)
 
           # Verificar se result não é NULL e se NS é maior que best_NS
