@@ -122,7 +122,7 @@ ScriptExit <- function(ArquivDuracoes,
       stringsAsFactors = FALSE
     )
 
-  } else if (eq == 5) {
+  } else if (eq == 4) {
     for (j in 1:length(ArquivTr)) {
       for (i in 1:length(ArquivDuracoes)) {
         IMaxSim[i, j] <- (best_result$aotim * (ArquivTr[j] + best_result$botim)^best_result$cotim) / ((ArquivDuracoes[i] + best_result$dotim)^best_result$eotim)
