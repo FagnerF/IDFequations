@@ -332,8 +332,6 @@ ScriptOtimiza <- function(eq_number, ArquivTr, ArquivDuracoes, IMaxObs) {
     dotim = dotim,
     eotim = eotim,
     fotim = fotim,
-    gotim = gotim,
-    hotim = hotim,
     NS = NS_value,
     stringsAsFactors = FALSE
   )
