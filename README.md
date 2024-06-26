@@ -38,10 +38,8 @@ IDFequations::ScriptIDF(StatesANA=c(),Directory="C:/Users/Fagner/Desktop/Results
 Example file: https://www.mediafire.com/file/snic3aep3d25eke/Example_database.xlsx/file
 
 IDFequations::ScriptIDFSR(Station=c("Agua Branca-PB"),LatSR=c("-7.512"),LonSR=c("-37.637"),Directory="C:/Users/Fagner/Desktop/Results/",Method=c("CETESB"),Isozona=c()) #Remote-sensing (“.nc” or “.tif”) 
-Example file:https://www.mediafire.com/file/518cx9nykmeo1hr/Example_database.txt/file 
 
 IDFequations::ScriptIDFCLIMBra(CLIMBra=c("ssp245"),Station=c("Agua Branca-PB"),LatSR=c("-7.512"),LonSR=c("-37.637"),Directory="C:/Users/Fagner/Desktop/Results/",Method=c("CETESB"),Isozona=c()) # CLIMBra database (ssp245 or ssp585)
-Example file:https://www.mediafire.com/file/518cx9nykmeo1hr/Example_database.txt/file 
 
 IDFequations::ScriptGraph(Directory="C:/Users/Fagner/Desktop/Results/")
 
