@@ -163,7 +163,7 @@ ScriptOtimiza <- function(eq_number, ArquivTr, ArquivDuracoes, IMaxObs) {
 
     optmin <-
       stats::nlminb(
-        c(0, 0, 0, 0, 0, 0, 0),
+        c(0, 0, 0, 0, 0, 0),
         function.min,
         control = list(
           trace = FALSE,
@@ -241,7 +241,7 @@ ScriptOtimiza <- function(eq_number, ArquivTr, ArquivDuracoes, IMaxObs) {
 
     optmin <-
       stats::nlminb(
-        c(0, 0, 0, 0, 0, 0),
+        c(0, 0, 0, 0, 0),
         function.min,
         control = list(
           trace = FALSE,
@@ -319,7 +319,7 @@ ScriptOtimiza <- function(eq_number, ArquivTr, ArquivDuracoes, IMaxObs) {
 
     optmin <-
       stats::nlminb(
-        c(0, 0, 0, 0),
+        c(0, 0, 0),
         function.min,
         control = list(
           trace = FALSE,
