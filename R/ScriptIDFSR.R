@@ -150,7 +150,7 @@ ScriptIDFSR <- function(Station, LatSR, LonSR, Directory, Method, Isozone) {
       best_result <- NULL
       best_NS <- -Inf # Inicializar com valor muito baixo para maximização
 
-      for (eq_number in 1:4) {
+      for (eq_number in 1:5) {
         result <- ScriptOtimiza(eq_number, ArquivTr, ArquivDuracoes, IMaxObs)
 
         # Verificar se result não é NULL e se NS é maior que best_NS

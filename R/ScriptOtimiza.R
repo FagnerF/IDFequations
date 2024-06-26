@@ -207,7 +207,7 @@ ScriptOtimiza <- function(eq_number, ArquivTr, ArquivDuracoes, IMaxObs) {
             (par[1] * (ArquivTr[x] - par[2])^par[3]) / (((par[4] * ArquivDuracoes[z]) + par[5])^par[6])
           erro1[z + iter, 1] <-
             (IMaxSim[z, x] - IMaxObs[z, x])^
-              2
+            2
           erro2[z + iter, 1] <-
             (IMaxObs[z, x] - mean(IMaxObs[, x]))^2
         }
@@ -284,7 +284,7 @@ ScriptOtimiza <- function(eq_number, ArquivTr, ArquivDuracoes, IMaxObs) {
             (par[1] * (ArquivTr[u] + par[2])^par[3]) / ((ArquivDuracoes[z] + par[4])^par[5])
           erro1[z + iter, 1] <-
             (IMaxSim[z, u] - IMaxObs[z, u])^
-              2
+            2
           erro2[z + iter, 1] <-
             (IMaxObs[z, u] - mean(IMaxObs[, u]))^2
         }
@@ -316,6 +316,80 @@ ScriptOtimiza <- function(eq_number, ArquivTr, ArquivDuracoes, IMaxObs) {
     cotim <- optmax$par[3]
     dotim <- optmax$par[4]
     eotim <- optmax$par[5]
+  } else if (eq_number == 5) {
+    function.min <- function(par) {
+      for (c in 1:length(ArquivTr)) {
+        for (d in 1:length(ArquivDuracoes)) {
+          IMaxSim[d, c] <-
+            (par[1] * (ArquivTr[c])^par[2]) / ((ArquivDuracoes[d])^par[3])
+          erro[d, c] <-
+            abs(IMaxSim[d, c] - IMaxObs[d, c]) / IMaxObs[d, c]
+        }
+        Sum.erroInicial[1, c] <- sum(erro[, c])
+      }
+      sum(Sum.erroInicial[1, ])
+    }
+
+    optmin <-
+      stats::nlminb(
+        c(0, 0, 0, 0),
+        function.min,
+        control = list(
+          trace = FALSE,
+          iter.max =
+            100000,
+          eval.max = 20000
+        ),
+        lower = c(0.001, 0.001, 0.001),
+        upper = c(Inf, Inf, Inf)
+      )
+
+    ainicial <- optmin$par[1]
+    binicial <- optmin$par[2]
+    cinicial <- optmin$par[3]
+
+    erro1 <- matrix(0, length(ArquivDuracoes) * length(ArquivTr), 1)
+    erro2 <- matrix(0, length(ArquivDuracoes) * length(ArquivTr), 1)
+
+    iter <- 0
+
+    function.NS <- function(par) {
+      for (f in 1:length(ArquivTr)) {
+        for (y in 1:length(ArquivDuracoes)) {
+          IMaxSim[y, f] <-
+            (par[1] * (ArquivTr[c])^par[2]) / ((ArquivDuracoes[d])^par[3])
+          erro1[y + iter, 1] <-
+            (IMaxSim[y, f] - IMaxObs[y, f])^
+            2
+          erro2[y + iter, 1] <-
+            (IMaxObs[y, f] - mean(IMaxObs[, f]))^2
+        }
+        iter <- iter + 1
+      }
+      (1 - (sum(erro1) / sum(erro2)))
+    }
+
+    function.max <- function(par) {
+      -function.NS(par)
+    }
+
+    optmax <-
+      stats::nlminb(
+        c(ainicial, binicial, cinicial),
+        function.max,
+        control = list(
+          trace = FALSE,
+          iter.max =
+            100000,
+          eval.max = 20000
+        ),
+        lower = c(0.001, 0.001, 0.001),
+        upper = c(Inf, Inf, Inf)
+      )
+
+    aotim <- optmax$par[1]
+    botim <- optmax$par[2]
+    cotim <- optmax$par[3]
   } else {
     stop("Invalid equation number.")
   }
