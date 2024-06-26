@@ -23,7 +23,7 @@ ScriptPMax24h <- function(X,
       setNames(c("5", "10", "15", "20", "25", "30", "50", "100", "1000", "10000", "Tr_5-50", "Tr_100"))
 
     # Inserindo a coluna das isozonas
-    df$Isozonas <- c("A", "B", "C", "D", "E", "F", "G", "H")
+    df$Isozone <- c("A", "B", "C", "D", "E", "F", "G", "H")
 
     # Reorganizar as colunas
     df <- df[, c(13, 1:12)]
@@ -35,12 +35,12 @@ ScriptPMax24h <- function(X,
     for (w in 1:length(ArquivTr)) {
       PMax24h[w] <- X[w] * 1.095
       if (w < length(ArquivTr)) {
-        PMax6min[w] <- PMax24h[w] * df[df$Isozonas == Isozona, as.character("Tr_5-50")]
+        PMax6min[w] <- PMax24h[w] * df[df$Isozone == Isozone, as.character("Tr_5-50")]
       } else {
-        PMax6min[w] <- PMax24h[w] * df[df$Isozonas == Isozona, as.character("Tr_100")]
+        PMax6min[w] <- PMax24h[w] * df[df$Isozone == Isozone, as.character("Tr_100")]
       }
 
-      PMax1h[w] <- PMax24h[w] * df[df$Isozonas == Isozona, as.character(ArquivTr[w])]
+      PMax1h[w] <- PMax24h[w] * df[df$Isozone == Isozone, as.character(ArquivTr[w])]
     }
 
     # Dados fornecidos na forma de matriz
