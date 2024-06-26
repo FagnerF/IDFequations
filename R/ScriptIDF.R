@@ -3,7 +3,7 @@
 #' @param StatesANA Input Data server ANA ("ACRE") or Local ("")
 #' @param Directory Input Location where the IDF equations will be saved
 #' @param Method Input Disaggregation method
-#' @param Isozona Input Isozona
+#' @param Isozone Input Isozone
 #'
 #' @importFrom stats setNames qnorm qlnorm qgamma qexp qweibull pweibull sd nlminb na.omit
 #' @import leaflet
@@ -27,7 +27,7 @@
 #' @import optimx
 #'
 #' @export
-ScriptIDF <- function(StatesANA, Directory, Method, Isozona) {
+ScriptIDF <- function(StatesANA, Directory, Method, Isozone) {
   tmp <- NULL
 
   ArquivTr <- c(5, 10, 15, 20, 25, 50, 100) # (years)
@@ -170,7 +170,7 @@ ScriptIDF <- function(StatesANA, Directory, Method, Isozona) {
               ArquivDuracoes,
               ArquivTr,
               Method,
-              Isozona
+              Isozone
             )
 
             # Executar a otimização para cada equação e selecionar o melhor resultado
@@ -322,7 +322,7 @@ ScriptIDF <- function(StatesANA, Directory, Method, Isozona) {
           ArquivDuracoes,
           ArquivTr,
           Method,
-          Isozona
+          Isozone
         )
 
         # Executar a otimização para cada equação e selecionar o melhor resultado

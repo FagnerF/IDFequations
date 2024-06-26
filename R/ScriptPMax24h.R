@@ -2,10 +2,10 @@ ScriptPMax24h <- function(X,
                           ArquivDuracoes,
                           ArquivTr,
                           Method,
-                          Isozona) {
+                          Isozone) {
   IMaxObs <- matrix(0, length(ArquivDuracoes), length(ArquivTr))
 
-  if (Method == "Isozona") {
+  if (Method == "Isozone") {
     # Table KS
     dados <- matrix(c(
       0.362, 0.358, 0.356, 0.355, 0.354, 0.353, 0.350, 0.347, 0.336, 0.336, 0.07, 0.063,

@@ -5,7 +5,7 @@
 #' @param LonSR Input Longitude
 #' @param Directory Input Location where the IDF equations will be saved
 #' @param Method Input Disaggregation method
-#' @param Isozona Input Isozona
+#' @param Isozone Input Isozone
 #'
 #' @importFrom stats setNames qnorm qlnorm qgamma qexp qweibull pweibull sd nlminb na.omit
 #' @import leaflet
@@ -30,7 +30,7 @@
 #' @import tibble
 #'
 #' @export
-ScriptIDFSR <- function(Station, LatSR, LonSR, Directory, Method, Isozona) {
+ScriptIDFSR <- function(Station, LatSR, LonSR, Directory, Method, Isozone) {
   tmp <- NULL
   Station <- vector("character", length = length(Station))
   Latitude <- vector("numeric", length = length(Station))
@@ -143,7 +143,7 @@ ScriptIDFSR <- function(Station, LatSR, LonSR, Directory, Method, Isozona) {
         ArquivDuracoes,
         ArquivTr,
         Method,
-        Isozona
+        Isozone
       )
 
       # Executar a otimização para cada equação e selecionar o melhor resultado
