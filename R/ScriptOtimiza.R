@@ -10,20 +10,7 @@ ScriptOtimiza <- function(eq_number, ArquivTr, ArquivDuracoes, IMaxObs) {
 
   IMaxSim <- matrix(0, length(ArquivDuracoes), length(ArquivTr))
   erro <- matrix(0, length(ArquivDuracoes), length(ArquivTr))
-  Sum.erroInicial <- matrix(0, 1, length(ArquivTr))
-
-  # Criar um dataframe vazio para armazenar os resultados
-  results_df <- data.frame(
-    Equation = integer(),
-    aotim = numeric(),
-    botim = numeric(),
-    cotim = numeric(),
-    dotim = numeric(),
-    eotim = numeric(),
-    fotim = numeric(),
-    NS = numeric(),
-    stringsAsFactors = FALSE
-  )
+  Sum.erroInicial <- matrix(0, 1, length(ArquivTr))  
 
   # Define function.min and function.NS based on the equation number
   if (eq_number == 1) {
