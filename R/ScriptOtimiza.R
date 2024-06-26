@@ -10,7 +10,7 @@ ScriptOtimiza <- function(eq_number, ArquivTr, ArquivDuracoes, IMaxObs) {
 
   IMaxSim <- matrix(0, length(ArquivDuracoes), length(ArquivTr))
   erro <- matrix(0, length(ArquivDuracoes), length(ArquivTr))
-  Sum.erroInicial <- matrix(0, 1, length(ArquivTr))  
+  Sum.erroInicial <- matrix(0, 1, length(ArquivTr))
 
   # Define function.min and function.NS based on the equation number
   if (eq_number == 1) {
@@ -341,15 +341,15 @@ ScriptOtimiza <- function(eq_number, ArquivTr, ArquivDuracoes, IMaxObs) {
     iter <- 0
 
     function.NS <- function(par) {
-      for (f in 1:length(ArquivTr)) {
-        for (y in 1:length(ArquivDuracoes)) {
-          IMaxSim[y, f] <-
+      for (c in 1:length(ArquivTr)) {
+        for (d in 1:length(ArquivDuracoes)) {
+          IMaxSim[d, c] <-
             (par[1] * (ArquivTr[c])^par[2]) / ((ArquivDuracoes[d])^par[3])
-          erro1[y + iter, 1] <-
-            (IMaxSim[y, f] - IMaxObs[y, f])^
+          erro1[d + iter, 1] <-
+            (IMaxSim[d, c] - IMaxObs[d, c])^
             2
-          erro2[y + iter, 1] <-
-            (IMaxObs[y, f] - mean(IMaxObs[, f]))^2
+          erro2[d + iter, 1] <-
+            (IMaxObs[d, c] - mean(IMaxObs[, c]))^2
         }
         iter <- iter + 1
       }
