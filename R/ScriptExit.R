@@ -59,7 +59,7 @@ ScriptExit <- function(ArquivDuracoes,
     a <- c(round(best_result$aotim, 2))
     b <- c(round(best_result$botim, 3))
     c <- c(round(best_result$cotim, 2))
-    d <- c(round(best_result$dotim, 2))
+    d <- c(round(best_result$dotim, 3))
     e <- c(round(best_result$eotim, 3))
 
     NS <- c(abs(round(min(
@@ -95,7 +95,7 @@ ScriptExit <- function(ArquivDuracoes,
     a <- c(round(best_result$aotim, 2))
     b <- c(round(best_result$botim, 2))
     c <- c(round(best_result$cotim, 3))
-    d <- c(round(best_result$dotim, 2))
+    d <- c(round(best_result$dotim, 3))
     e <- c(round(best_result$eotim, 2))
     f <- c(round(best_result$fotim, 3))
 
