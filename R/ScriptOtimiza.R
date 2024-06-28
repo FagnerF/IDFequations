@@ -14,6 +14,7 @@ ScriptOtimiza <- function(eq_number, ArquivTr, ArquivDuracoes, IMaxObs) {
 
   # Define function.min and function.NS based on the equation number
   if (eq_number == 1) {
+    set.seed(123)
     function.min <- function(par) {
       for (i in 1:length(ArquivTr)) {
         for (j in 1:length(ArquivDuracoes)) {
@@ -80,6 +81,7 @@ ScriptOtimiza <- function(eq_number, ArquivTr, ArquivDuracoes, IMaxObs) {
     cotim <- optmax$par[3]
     dotim <- optmax$par[4]
   } else if (eq_number == 2) {
+    set.seed(123)
     function.min <- function(par) {
       for (m in 1:length(ArquivTr)) {
         for (n in 1:length(ArquivDuracoes)) {
@@ -148,6 +150,7 @@ ScriptOtimiza <- function(eq_number, ArquivTr, ArquivDuracoes, IMaxObs) {
     dotim <- optmax$par[4]
     eotim <- optmax$par[5]
   } else if (eq_number == 3) {
+    set.seed(123)
     function.min <- function(par) {
       for (b in 1:length(ArquivTr)) {
         for (a in 1:length(ArquivDuracoes)) {
@@ -226,6 +229,7 @@ ScriptOtimiza <- function(eq_number, ArquivTr, ArquivDuracoes, IMaxObs) {
     eotim <- optmax$par[5]
     fotim <- optmax$par[6]
   } else if (eq_number == 4) {
+    set.seed(123)
     function.min <- function(par) {
       for (g in 1:length(ArquivTr)) {
         for (r in 1:length(ArquivDuracoes)) {
@@ -304,6 +308,7 @@ ScriptOtimiza <- function(eq_number, ArquivTr, ArquivDuracoes, IMaxObs) {
     dotim <- optmax$par[4]
     eotim <- optmax$par[5]
   } else if (eq_number == 5) {
+    set.seed(123)
     function.min <- function(par) {
       for (c in 1:length(ArquivTr)) {
         for (d in 1:length(ArquivDuracoes)) {
