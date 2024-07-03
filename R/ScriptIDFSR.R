@@ -37,18 +37,12 @@ ScriptIDFSR <- function(Station, LatSR, LonSR, Directory, Method, Isozone) {
   Longitude <- vector("numeric", length = length(Station))
   Equation <- vector("numeric", length = length(Station))
 
-  ArquivTr <- c(2, 5, 10, 15, 20, 25, 50, 75, 100) # (years)
-  TamanhoArquivTr <- length(ArquivTr)
+  ArquivTr <- c(5, 10, 15, 20, 25, 50, 100) # (years)
 
   Probab <- 1 / ArquivTr
 
   ArquivDuracoes <-
-    c(5, 10, 15, 20, 30, 60, 360, 480, 720, 1440) # (minutes)
-  TamanhoArquivDuracoes <- length(ArquivDuracoes)
-
-  valcrit <- c(0.254)
-
-  stationType <- 2
+    c(6, 10, 15, 20, 30, 60, 360, 480, 720, 1440) # (minutes)
 
   path <- file.choose()
 
