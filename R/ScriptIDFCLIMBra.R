@@ -47,6 +47,9 @@ ScriptIDFCLIMBra <-
     ArquivDuracoes <-
       c(6, 10, 15, 20, 30, 60, 360, 480, 720, 1440) # (minutes)
 
+    # URL base
+    base_url <- "https://download.scidb.cn/download"
+
     # URL dependendo do cenário
     url <- switch(CLIMBra,
       "ssp245" = paste0(base_url, "?fileId=4a9e943f253195a7b10eaaaeec55c83e&path=/V5/Gridded%20data/pr/ssp245/EC-EARTH3-pr-ssp245.nc&fileName=EC-EARTH3-pr-ssp245.nc"),
