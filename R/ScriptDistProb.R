@@ -8,8 +8,7 @@ ScriptDistProb <- function(dfTAD,
                            modweibull,
                            modgumbel,
                            modGEV) {
-  my_list02 <- list()
-
+  
   X <- NULL
 
   result <- switch(dfTAD,
@@ -76,9 +75,7 @@ ScriptDistProb <- function(dfTAD,
           lower.tail = TRUE
         ))
     )
-  )
+  )  
 
-  my_list02 <- list(X = X)
-
-  return(my_list02)
+  return(X)
 }

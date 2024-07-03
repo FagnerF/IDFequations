@@ -34,6 +34,7 @@
 ScriptIDFCLIMBra <-
   function(CLIMBra, Station, LatSR, LonSR, Directory, Method, Isozone) {
     tmp <- NULL
+    TableFinal <- NULL
     Station <- vector("character", length = length(Station))
     Latitude <- vector("numeric", length = length(Station))
     Longitude <- vector("numeric", length = length(Station))
