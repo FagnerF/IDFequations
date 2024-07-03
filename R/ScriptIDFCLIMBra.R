@@ -147,7 +147,7 @@ ScriptIDFCLIMBra <-
           modweibull,
           modgumbel,
           modGEV
-        )$X
+        )
 
         # Calcular valores máximos observados
         IMaxObs <- ScriptPMax24h(

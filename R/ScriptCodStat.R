@@ -159,7 +159,7 @@ ScriptCodStat <- function(StatesANA, stationType) {
       cat("No station data available.\n")
       return(NULL)
     } else {
-      return(list(CodStat = dfTab))
+      return(list(CodStat=dfTab))
     }
   } else {
     cat("No data was downloaded from any state.\n")

@@ -162,7 +162,7 @@ ScriptIDF <- function(StatesANA, Directory, Method, Isozone) {
               modweibull,
               modgumbel,
               modGEV
-            )$X
+            )
 
             # Calcular valores máximos observados
             IMaxObs <- ScriptPMax24h(
@@ -314,7 +314,7 @@ ScriptIDF <- function(StatesANA, Directory, Method, Isozone) {
           modweibull,
           modgumbel,
           modGEV
-        )$X
+        )
 
         # Calcular valores máximos observados
         IMaxObs <- ScriptPMax24h(

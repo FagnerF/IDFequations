@@ -129,7 +129,7 @@ ScriptIDFSR <- function(Station, LatSR, LonSR, Directory, Method, Isozone) {
         modweibull,
         modgumbel,
         modGEV
-      )$X
+      )
 
       # Calcular valores máximos observados
       IMaxObs <- ScriptPMax24h(
