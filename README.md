@@ -42,4 +42,4 @@ IDFequations::ScriptIDFCLIMBra(CLIMBra=c("ssp245"),Station=c("Agua Branca-PB"),L
 Note: To use this package, are required time series over 20 years.
 
 ### Quote
-Shortly
+Costa F. F., Rufino I. A. A., Aragão R., Castro M. A. H., Filho R. S. R. (2024). GEOT-IDF Equations: An R-based tool for intense rainfall studies in Brazil. Earth Science Informatics. https://doi.org/10.21203/rs.3.rs-4172597/v1
