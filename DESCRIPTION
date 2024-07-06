@@ -21,12 +21,9 @@ Imports:
     leaflet,
     lubridate,
     magrittr,
-    optimx,
     parallel,
-    PearsonDS,
     raster,
     readxl,
-    smwrBase (>= 1.1.5),
     sp,
     stats,
     terra,
@@ -34,7 +31,5 @@ Imports:
     tidyr,
     utils,
     xml2
-Remotes: 
-    USGS-R/smwrBase
 URL: https://github.com/FagnerF/IDFequations
 BugReports: https://github.com/FagnerF/IDFequations/issues
