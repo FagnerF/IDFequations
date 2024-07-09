@@ -1,4 +1,4 @@
-# 👋 Hello! Welcome the GEOT-IDF Equations <p align="right">
+# 👋 Hello! Welcome the tool GEOT-IDF Equations <p align="right">
 
 ## My name is Fagner Costa
 
