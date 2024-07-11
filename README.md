@@ -18,10 +18,13 @@ As the rainfall regime varies from region to region, and the IDF curves are stri
 Usually, IDFs built are from observed historical data, assuming that, in the future, the same trend will be in situ (stationarity).
 
 ### Pre-requisites
-R version = 4.4.1 (https://cran.r-project.org/);
-Rtools version = 4.4 (https://cran.r-project.org/bin/windows/Rtools/);
-Software RStudio (https://posit.co/downloads/); and
-System operational: Windows.
+R version = 4.4.1 (https://cran.r-project.org/)
+
+Rtools version = 4.4 (https://cran.r-project.org/bin/windows/Rtools/)
+
+Software RStudio (https://posit.co/downloads/)
+
+System operational: Windows
 
 ### How to install
 install.packages("devtools")
