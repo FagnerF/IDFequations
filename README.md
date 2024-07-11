@@ -17,7 +17,7 @@ The determination of each curve depends on local rainfall; it is impossible to u
 As the rainfall regime varies from region to region, and the IDF curves are strictly related to rainfall, they also vary.
 Usually, IDFs built are from observed historical data, assuming that, in the future, the same trend will be in situ (stationarity).
 
-### Pre-requisites
+### Prerequisites
 R version = 4.4.1 (https://cran.r-project.org/)
 
 Rtools version = 4.4 (https://cran.r-project.org/bin/windows/Rtools/)
