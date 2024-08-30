@@ -31,3 +31,5 @@ Imports:
     xml2,
     sp
 RoxygenNote: 7.3.2
+URL: https://github.com/FagnerF/IDFequations
+BugReports: https://github.com/FagnerF/IDFequations/issues
