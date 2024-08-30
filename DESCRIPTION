@@ -1,0 +1,33 @@
+Package: IDFequations
+Title: GEOT-IDF Equations
+Version: 1.0
+Authors@R: 
+    person("Fagner", "Costa", , "fagnerengenheiroambiental@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "https://orcid.org/0000-0003-4763-4783"))
+Description: This package the coefficients of IDF equations.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    doParallel,
+    dplyr,
+    e1071,
+    evd,
+    fitdistrplus,
+    foreach,
+    hydroGOF,
+    leaflet,
+    lubridate,
+    magrittr,
+    optimx,
+    parallel,
+    raster,
+    readxl,
+    stats,
+    terra,
+    tibble,
+    tidyr,
+    utils,
+    xml2,
+    sp
+RoxygenNote: 7.3.2
