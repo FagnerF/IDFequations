@@ -3,7 +3,7 @@
 ## My name is Fagner Costa
 
 ### Prerequisites
-R version = 4.4.1 (https://cran.r-project.org/)
+R version = 4.4.3 (https://cran.r-project.org/)
 
 Rtools version = 4.4 (https://cran.r-project.org/bin/windows/Rtools/)
 
